@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — HTML kostra vsech sekci + kompletni CSS design system (mobile-first)
-- [ ] 01-02-PLAN.md — JS produktova data + navigace + .nojekyll
+- [x] 01-02-PLAN.md — JS produktova data + navigace + .nojekyll
 - [ ] 01-03-PLAN.md — Finalni automatizovana kontrola + vizualni checkpoint s uzivatelkou
 
 ### Phase 2: Kosik a akce 3+1
@@ -78,7 +78,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Zaklad a zobrazeni produktu | 1/3 | In progress | - |
+| 1. Zaklad a zobrazeni produktu | 2/3 | In progress | - |
 | 2. Kosik a akce 3+1 | 0/TBD | Not started | - |
 | 3. Objednavkovy formular a e-maily | 0/TBD | Not started | - |
 | 4. Nasazeni a finalni QA | 0/TBD | Not started | - |

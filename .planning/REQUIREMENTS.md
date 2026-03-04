@@ -9,7 +9,7 @@
 
 - [x] **DISP-01**: Návštěvník vidí hero sekci s názvem značky, podtitulem a poetickým textem
 - [x] **DISP-02**: Návštěvník vidí příběh autorky (sekce "O mně") s fotkou produktu
-- [ ] **DISP-03**: Návštěvník vidí 4 produktové karty (kopretina 380 Kč, vlčí mák 380 Kč, šiška 380 Kč, zástěra 890 Kč) s fotkou, popisem, materiálem a cenou
+- [x] **DISP-03**: Návštěvník vidí 4 produktové karty (kopretina 380 Kč, vlčí mák 380 Kč, šiška 380 Kč, zástěra 890 Kč) s fotkou, popisem, materiálem a cenou
 - [x] **DISP-04**: Návštěvník vidí sekci hodnot (český len, strojová výšivka, krásné balení)
 - [x] **DISP-05**: Návštěvník vidí banner akce 3+1
 
@@ -45,9 +45,9 @@
 ### Navigace a UX
 
 - [x] **NAV-01**: Fixní horní navigace s logem vlevo a odkazy vpravo (Příběh · Výrobky · Kontakt)
-- [ ] **NAV-02**: Na mobilu navigace přejde do hamburger menu nebo zmenšených odkazů
+- [x] **NAV-02**: Na mobilu navigace přejde do hamburger menu nebo zmenšených odkazů
 - [x] **NAV-03**: Web je plně responzivní, mobilní zobrazení je priorita
-- [ ] **NAV-04**: Fade-in animace při načtení hero sekce
+- [x] **NAV-04**: Fade-in animace při načtení hero sekce
 
 ### SEO a nasazení
 
@@ -99,13 +99,13 @@
 |-------------|-------|--------|
 | DISP-01 | Phase 1 | Done (01-01) |
 | DISP-02 | Phase 1 | Done (01-01) |
-| DISP-03 | Phase 1 | Pending (01-02) |
+| DISP-03 | Phase 1 | Done (01-02) |
 | DISP-04 | Phase 1 | Done (01-01) |
 | DISP-05 | Phase 1 | Done (01-01) |
 | NAV-01 | Phase 1 | Done (01-01) |
-| NAV-02 | Phase 1 | Pending (01-02) |
+| NAV-02 | Phase 1 | Done (01-02) |
 | NAV-03 | Phase 1 | Done (01-01) |
-| NAV-04 | Phase 1 | Pending (01-02) |
+| NAV-04 | Phase 1 | Done (01-02) |
 | LEGAL-01 | Phase 1 | Done (01-01) |
 | LEGAL-02 | Phase 1 | Done (01-01) |
 | CART-01 | Phase 2 | Pending |
@@ -137,4 +137,4 @@
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 — DISP-01, DISP-02, DISP-04, DISP-05, NAV-01, NAV-03, LEGAL-01, LEGAL-02 marked complete after 01-01 execution*
+*Last updated: 2026-03-04 — DISP-03, NAV-02, NAV-04 marked complete after 01-02 execution*
