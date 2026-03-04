@@ -95,8 +95,46 @@
 
 ## Traceability
 
-Bude doplněno během tvorby roadmapy.
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| DISP-01 | Phase 1 | Pending |
+| DISP-02 | Phase 1 | Pending |
+| DISP-03 | Phase 1 | Pending |
+| DISP-04 | Phase 1 | Pending |
+| DISP-05 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Pending |
+| NAV-02 | Phase 1 | Pending |
+| NAV-03 | Phase 1 | Pending |
+| NAV-04 | Phase 1 | Pending |
+| LEGAL-01 | Phase 1 | Pending |
+| LEGAL-02 | Phase 1 | Pending |
+| CART-01 | Phase 2 | Pending |
+| CART-02 | Phase 2 | Pending |
+| CART-03 | Phase 2 | Pending |
+| CART-04 | Phase 2 | Pending |
+| CART-05 | Phase 2 | Pending |
+| CART-06 | Phase 2 | Pending |
+| CART-07 | Phase 2 | Pending |
+| ORDER-01 | Phase 3 | Pending |
+| ORDER-02 | Phase 3 | Pending |
+| ORDER-03 | Phase 3 | Pending |
+| ORDER-04 | Phase 3 | Pending |
+| ORDER-05 | Phase 3 | Pending |
+| ORDER-06 | Phase 3 | Pending |
+| ORDER-07 | Phase 3 | Pending |
+| ORDER-08 | Phase 3 | Pending |
+| ORDER-09 | Phase 3 | Pending |
+| ORDER-10 | Phase 3 | Pending |
+| EMAIL-01 | Phase 3 | Pending |
+| EMAIL-02 | Phase 3 | Pending |
+| EMAIL-03 | Phase 3 | Pending |
+| SEO-01 | Phase 4 | Pending |
+| SEO-02 | Phase 4 | Pending |
+| SEO-03 | Phase 4 | Pending |
+| DEPLOY-01 | Phase 4 | Pending |
+| DEPLOY-02 | Phase 4 | Pending |
+| DEPLOY-03 | Phase 4 | Pending |
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 after initial definition*
+*Last updated: 2026-03-04 — traceability added after roadmap creation*
