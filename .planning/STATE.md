@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-04T17:44:59.394Z"
+last_updated: "2026-03-04T19:29:00Z"
 progress:
   total_phases: 1
   completed_phases: 1
   total_plans: 3
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 ## Current Position
 
 Phase: 5 of 5 (Kosik a objednavky a kontaktni formular)
-Plan: 1 of 3 in current phase
-Status: Phase 5 Plan 01 complete — ready for Plan 02 (cart.js)
-Last activity: 2026-03-04 — Plan 05-01 completed (HTML/CSS scaffold hotovy)
+Plan: 2 of 3 in current phase
+Status: Phase 5 Plan 02 complete — ready for Plan 03 (order.js)
+Last activity: 2026-03-04 — Plan 05-02 completed (cart.js — cart state modul hotovy)
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 53%
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: [████░░░░░░] 40%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-zaklad-a-zobrazeni-produktu | 3 | 10 min | 3.3 min |
-| 05-kosik-a-objednavky-a-kontaktni-formular | 1 | 3 min | 3 min |
+| 05-kosik-a-objednavky-a-kontaktni-formular | 2 | 10 min | 5 min |
 
 **Recent Trend:**
 - Last 5 plans: 4 min, 1 min, ~5 min, 3 min
@@ -71,6 +71,10 @@ Recent decisions affecting current work:
 - [05-01]: Packeta widget sync (bez defer/async) v <body> pred order.js — required by Packeta API
 - [05-01]: .btn--secondary pridano do CSS — nebyl v puvodnim design systemu, potreba pro Packeta tlacitko
 - [05-01]: placeholder YOUR_EMAILJS_PUBLIC_KEY ponechan — Misa doda klic pozdeji pred nasazenim
+- [05-02]: Cart state pouze v localStorage + JS poli — DOM je jen vykreslovaci vrstva (zadny cart state v DOM atributech)
+- [05-02]: calcPromo filtruje PRODUCTS[].type === 'uterka' — zastera nikdy nevstupuje do promo vypoctu
+- [05-02]: Math.floor(uterkyQty / 4) free kusu; sort ascending zajisti nejlevnejsi kusy jako free
+- [05-02]: initCart() musi byt az po renderProductCards() — btn-add tlacitka musi existovat pred delegovanym listenerem
 
 ### Roadmap Evolution
 
@@ -89,5 +93,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 05-01-PLAN.md (HTML/CSS scaffold — Phase 5 Plan 01 kompletni)
+Stopped at: Completed 05-02-PLAN.md (cart state modul — Phase 5 Plan 02 kompletni)
 Resume file: None

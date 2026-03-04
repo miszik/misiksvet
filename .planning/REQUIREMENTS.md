@@ -16,9 +16,9 @@
 ### Košík
 
 - [x] **CART-01**: Zákazník může přidat produkt do košíku tlačítkem na produktové kartě
-- [ ] **CART-02**: Zákazník může v košíku upravit množství každého produktu (+ / -)
-- [ ] **CART-03**: Zákazník může produkt z košíku odebrat
-- [ ] **CART-04**: Košík zobrazuje průběžný součet a počet kusů
+- [x] **CART-02**: Zákazník může v košíku upravit množství každého produktu (+ / -)
+- [x] **CART-03**: Zákazník může produkt z košíku odebrat
+- [x] **CART-04**: Košík zobrazuje průběžný součet a počet kusů
 - [x] **CART-05**: Košík automaticky počítá akci 3+1 pouze pro utěrky (při 3+ kusech utěrek je nejlevnější zdarma; zástěra do akce nevstupuje)
 - [x] **CART-06**: Stav košíku se zachová při obnovení stránky (localStorage)
 - [x] **CART-07**: Košík je viditelný/přístupný z navigace (ikona s počtem kusů)
@@ -109,9 +109,9 @@
 | LEGAL-01 | Phase 1 | Done (01-01) |
 | LEGAL-02 | Phase 1 | Done (01-01) |
 | CART-01 | Phase 2 | Complete |
-| CART-02 | Phase 2 | Pending |
-| CART-03 | Phase 2 | Pending |
-| CART-04 | Phase 2 | Pending |
+| CART-02 | Phase 2 | Complete |
+| CART-03 | Phase 2 | Complete |
+| CART-04 | Phase 2 | Complete |
 | CART-05 | Phase 2 | Complete |
 | CART-06 | Phase 2 | Complete |
 | CART-07 | Phase 2 | Complete |
