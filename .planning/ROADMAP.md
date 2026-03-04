@@ -12,7 +12,7 @@ Ctyri faze od prazdneho repozitare az po fungujici e-shop na GitHub Pages. Kazda
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Zaklad a zobrazeni produktu** - Vizualne kompletni stranka s produktovymi kartami, hero, pribeh, hodnoty a promo banner — bez interaktivity
+- [x] **Phase 1: Zaklad a zobrazeni produktu** - Vizualne kompletni stranka s produktovymi kartami, hero, pribeh, hodnoty a promo banner — bez interaktivity
 - [ ] **Phase 2: Kosik a akce 3+1** - Plne funkcni kosik s localStorage perzistenci, zivymi soucty a spravnym vypoctem akce 3+1
 - [ ] **Phase 3: Objednavkovy formular a e-maily** - End-to-end objednavkovy tok: vyplneni formulare, vyber dopravy, Packeta widget, validace, odeslani a potvrzovaci emaily pres EmailJS
 - [ ] **Phase 4: Nasazeni a finalni QA** - SEO meta tagy, Open Graph, optimalizace obrazku, nasazeni na GitHub Pages, vlastni domena a overeni na realnem telefonu
@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — HTML kostra vsech sekci + kompletni CSS design system (mobile-first)
 - [x] 01-02-PLAN.md — JS produktova data + navigace + .nojekyll
-- [ ] 01-03-PLAN.md — Finalni automatizovana kontrola + vizualni checkpoint s uzivatelkou
+- [x] 01-03-PLAN.md — Finalni automatizovana kontrola + vizualni checkpoint s uzivatelkou
 
 ### Phase 2: Kosik a akce 3+1
 **Goal**: Zakaznik muze sestavit objednavku — pridat produkty, upravit mnozstvi, videt spravnou celkovou cenu vcetne slevy 3+1, a kosik prezije obnoveni stranky
@@ -78,7 +78,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Zaklad a zobrazeni produktu | 2/3 | In progress | - |
+| 1. Zaklad a zobrazeni produktu | 3/3 | Complete | 2026-03-04 |
 | 2. Kosik a akce 3+1 | 0/TBD | Not started | - |
 | 3. Objednavkovy formular a e-maily | 0/TBD | Not started | - |
 | 4. Nasazeni a finalni QA | 0/TBD | Not started | - |
