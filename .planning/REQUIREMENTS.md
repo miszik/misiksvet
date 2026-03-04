@@ -9,7 +9,7 @@
 
 - [ ] **DISP-01**: Návštěvník vidí hero sekci s názvem značky, podtitulem a poetickým textem
 - [ ] **DISP-02**: Návštěvník vidí příběh autorky (sekce "O mně") s fotkou produktu
-- [ ] **DISP-03**: Návštěvník vidí 3 produktové karty (kopretina, vlčí mák, šiška) s fotkou, popisem, materiálem a cenou
+- [ ] **DISP-03**: Návštěvník vidí 4 produktové karty (kopretina 380 Kč, vlčí mák 380 Kč, šiška 380 Kč, zástěra 890 Kč) s fotkou, popisem, materiálem a cenou
 - [ ] **DISP-04**: Návštěvník vidí sekci hodnot (český len, strojová výšivka, krásné balení)
 - [ ] **DISP-05**: Návštěvník vidí banner akce 3+1
 
@@ -19,7 +19,7 @@
 - [ ] **CART-02**: Zákazník může v košíku upravit množství každého produktu (+ / -)
 - [ ] **CART-03**: Zákazník může produkt z košíku odebrat
 - [ ] **CART-04**: Košík zobrazuje průběžný součet a počet kusů
-- [ ] **CART-05**: Košík automaticky počítá akci 3+1 (při 3+ kusech je nejlevnější zdarma — de facto každý 4. kus zdarma, všechny stojí 380 Kč)
+- [ ] **CART-05**: Košík automaticky počítá akci 3+1 pouze pro utěrky (při 3+ kusech utěrek je nejlevnější zdarma; zástěra do akce nevstupuje)
 - [ ] **CART-06**: Stav košíku se zachová při obnovení stránky (localStorage)
 - [ ] **CART-07**: Košík je viditelný/přístupný z navigace (ikona s počtem kusů)
 

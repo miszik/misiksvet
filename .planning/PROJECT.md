@@ -6,7 +6,7 @@ Jednostránkový web s jednoduchým košíkem pro značku **Mišik svět** — r
 
 ## Core Value
 
-Zákazník si musí být schopen vybrat utěrky, sestavit objednávku a odeslat ji — vše bez nutnosti opustit web nebo kontaktovat Míšu přes Instagram.
+Zákazník si musí být schopen vybrat produkty (utěrky i zástěru), sestavit objednávku a odeslat ji — vše bez nutnosti opustit web nebo kontaktovat Míšu přes Instagram.
 
 ## Requirements
 
@@ -36,9 +36,16 @@ Zákazník si musí být schopen vybrat utěrky, sestavit objednávku a odeslat 
 
 - **Autorka:** Míša, maminka na rodičovské, prodává zatím neformálně, plánuje živnost
 - **Instagram:** @misiksvet — hlavní prodejní kanál, odtud chodí zákazníci (= mobil priority)
-- **Produkty:** 3 motivy — kopretina, vlčí mák, šiška s větvičkou (380 Kč/ks)
-- **Akce:** 3+1 zdarma (kup 3, čtvrtou jako dárek)
-- **Fotky:** 8 fotek ve složce `/fotky/` — je potřeba identifikovat a přejmenovat
+- **Produkty:**
+  - Utěrky (380 Kč/ks): kopretina, vlčí mák, šiška s větvičkou
+  - Zástěra (890 Kč): lněná zástěra s kopretinou a textem "Nemám šajnu co z toho bude" — text zatím pevný
+- **Akce:** 3+1 zdarma — platí pouze pro utěrky (při 3+ kusech utěrek je nejlevnější zdarma)
+- **Fotky** (identifikováno):
+  - `kopretina.jpg` ← 20251208_185910.jpg (nejlepší záběr)
+  - `vlci-mak.jpg` ← 20251208_190226.jpg
+  - `siska.jpg` ← 20251208_190438.jpg (detail motivu)
+  - `zastera.jpg` ← 20251115_111917.jpg
+  - `kolekce.jpg` ← 20251208_190557.jpg (skupinová fotka, pro hero sekci)
 - **Vizuální styl:** Skandinávský minimalismus, béžová/krémová/hnědá, fonty Cormorant Garamond + Josefin Sans
 - **Platba:** QR kód / bankovní převod — Míša posílá platební instrukce ručně po objednávce
 
