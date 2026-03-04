@@ -1,0 +1,500 @@
+/* ============================================================
+   MIŠIK SVĚT — design system a kompletni mobile-first styling
+   ============================================================ */
+
+/* ============================================================
+   1. CSS Design Tokens (:root)
+   ============================================================ */
+:root {
+  /* Colors */
+  --color-bg:           #faf8f4;   /* kremova — pozadi stranky */
+  --color-surface:      #f5f0e8;   /* bezova — pozadi karet a sekci */
+  --color-brown:        #8b6914;   /* tepla hneda — nadpisy, tlacitka, akcenty */
+  --color-green:        #5a7a4a;   /* tlumena zelena — sekundarni akcent */
+  --color-text:         #3a3228;   /* tmave — hlavni text */
+  --color-text-muted:   #7a6e62;   /* seda — doplnkovy text */
+
+  /* Typography */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Josefin Sans', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  2rem;
+  --space-lg:  4rem;
+  --space-xl:  8rem;
+
+  /* Layout */
+  --max-width:  1200px;
+  --nav-height: 64px;
+}
+
+/* ============================================================
+   2. CSS Reset a zakladni base styly
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================================
+   3. Typography
+   ============================================================ */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  color: var(--color-brown);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 400;
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================================
+   4. Navigace
+   ============================================================ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-md);
+  height: var(--nav-height);
+  background: transparent;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav.scrolled {
+  background: var(--color-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.nav-logo {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-brown);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: var(--space-md);
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--color-brown);
+}
+
+/* Hamburger — skryty na desktopu, viditelny na mobilu */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.hamburger__bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-text);
+  margin: 5px 0;
+  transition: transform 0.3s ease;
+}
+
+/* ============================================================
+   5. Hero sekce
+   ============================================================ */
+#hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.hero__bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  background: rgba(250, 248, 244, 0.82);
+  border-radius: 4px;
+  max-width: 600px;
+  animation: fadeIn 1s ease-out both;
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--color-brown);
+  margin-bottom: var(--space-xs);
+}
+
+.hero__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.hero__text {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   6. Sekce — obecne
+   ============================================================ */
+.section {
+  padding: var(--space-lg) var(--space-md);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section--surface {
+  max-width: 100%;
+  background: var(--color-surface);
+  padding: var(--space-lg) var(--space-md);
+}
+
+.section--surface > * {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   7. Sekce Pribeh (dvousloupec)
+   ============================================================ */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .story-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.story-text p {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.story-image img {
+  border-radius: 4px;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+/* ============================================================
+   8. Produktove karty (vyrendrovane JS)
+   ============================================================ */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.product-card {
+  background: var(--color-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  transform: translateY(-3px);
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.product-card__body {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--color-brown);
+  margin-bottom: var(--space-xs);
+}
+
+.product-card__desc {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  flex-grow: 1;
+}
+
+.product-card__material {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.product-card__price {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-brown);
+  margin-top: auto;
+}
+
+/* ============================================================
+   9. Sekce Hodnot
+   ============================================================ */
+.values-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .values-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.value-card {
+  padding: var(--space-md);
+}
+
+.value-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.value-card h3 {
+  color: var(--color-brown);
+  margin-bottom: var(--space-xs);
+}
+
+.value-card p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   10. Banner akce 3+1
+   ============================================================ */
+.promo-banner {
+  background: var(--color-brown);
+  color: var(--color-bg);
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  border-radius: 4px;
+}
+
+.promo-banner h2 {
+  color: var(--color-bg);
+  margin-bottom: var(--space-sm);
+}
+
+.promo-banner p {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.promo-note {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   11. Kontakt
+   ============================================================ */
+#kontakt {
+  text-align: center;
+}
+
+#kontakt p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   12. Tlacitka
+   ============================================================ */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn--primary {
+  background: var(--color-brown);
+  color: var(--color-bg);
+}
+
+.btn--primary:hover {
+  background: #6b4f10;
+}
+
+/* ============================================================
+   13. Paticka
+   ============================================================ */
+footer {
+  background: var(--color-text);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+}
+
+footer p {
+  font-size: 0.85rem;
+  margin-bottom: var(--space-xs);
+}
+
+footer a {
+  color: var(--color-surface);
+}
+
+.legal {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   14. Responzivni navigace na mobilu
+   ============================================================ */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    flex-direction: column;
+    padding: var(--space-md);
+    gap: var(--space-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 99;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li {
+    text-align: center;
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+  }
+}
