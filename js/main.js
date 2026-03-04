@@ -71,5 +71,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProductCards();
   initNav();
   initCart();
-  // initOrderForm(); — bude pridano v Planu 03
+  initOrderForm();
 });
