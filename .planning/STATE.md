@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-04)
 
 **Core value:** Zakaznik si vybere uterky, sestavi objednavku a odesle ji — vse bez nutnosti opustit web nebo kontaktovat Misu pres Instagram.
-**Current focus:** Phase 1 — Zaklad a zobrazeni produktu
+**Current focus:** Phase 5 — Kosik a objednavky a kontaktni formular
 
 ## Current Position
 
-Phase: 1 of 4 (Zaklad a zobrazeni produktu)
-Plan: 3 of 3 in current phase
-Status: Phase 1 complete — ready for Phase 2
-Last activity: 2026-03-04 — Plan 01-03 completed (Vizualni overeni — approved)
+Phase: 5 of 5 (Kosik a objednavky a kontaktni formular)
+Plan: 1 of 3 in current phase
+Status: Phase 5 Plan 01 complete — ready for Plan 02 (cart.js)
+Last activity: 2026-03-04 — Plan 05-01 completed (HTML/CSS scaffold hotovy)
 
-Progress: [███░░░░░░░] 30%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
@@ -41,9 +41,10 @@ Progress: [███░░░░░░░] 30%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-zaklad-a-zobrazeni-produktu | 3 | 10 min | 3.3 min |
+| 05-kosik-a-objednavky-a-kontaktni-formular | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 1 min, ~5 min
+- Last 5 plans: 4 min, 1 min, ~5 min, 3 min
 - Trend: Fast execution
 
 *Updated after each plan completion*
@@ -66,6 +67,14 @@ Recent decisions affecting current work:
 - [01-02]: Pasivni scroll listener povinny pro vykon (eliminuje layout thrashing)
 - [01-02]: Menu se zavre po kliknuti na navlink — nutne UX pro mobil pri pouziti kotevnich odkazu
 - [01-03]: Vizualni overeni schvaleno s poznamkou "texty lze doladit pozdeji" — texty nejsou blocker pro Phase 2
+- [05-01]: EmailJS CDN v <head> — musi byt inicializovan pred cart.js a order.js (tyto scripty ho pouzivaji)
+- [05-01]: Packeta widget sync (bez defer/async) v <body> pred order.js — required by Packeta API
+- [05-01]: .btn--secondary pridano do CSS — nebyl v puvodnim design systemu, potreba pro Packeta tlacitko
+- [05-01]: placeholder YOUR_EMAILJS_PUBLIC_KEY ponechan — Misa doda klic pozdeji pred nasazenim
+
+### Roadmap Evolution
+
+- Phase 5 added: Kosik a objednavky a kontaktni formular
 
 ### Pending Todos
 
@@ -80,5 +89,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 01-03-PLAN.md (Vizualni overeni — Phase 1 kompletni)
+Stopped at: Completed 05-01-PLAN.md (HTML/CSS scaffold — Phase 5 Plan 01 kompletni)
 Resume file: None

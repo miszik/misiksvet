@@ -15,32 +15,32 @@
 
 ### Košík
 
-- [ ] **CART-01**: Zákazník může přidat produkt do košíku tlačítkem na produktové kartě
+- [x] **CART-01**: Zákazník může přidat produkt do košíku tlačítkem na produktové kartě
 - [ ] **CART-02**: Zákazník může v košíku upravit množství každého produktu (+ / -)
 - [ ] **CART-03**: Zákazník může produkt z košíku odebrat
 - [ ] **CART-04**: Košík zobrazuje průběžný součet a počet kusů
-- [ ] **CART-05**: Košík automaticky počítá akci 3+1 pouze pro utěrky (při 3+ kusech utěrek je nejlevnější zdarma; zástěra do akce nevstupuje)
-- [ ] **CART-06**: Stav košíku se zachová při obnovení stránky (localStorage)
-- [ ] **CART-07**: Košík je viditelný/přístupný z navigace (ikona s počtem kusů)
+- [x] **CART-05**: Košík automaticky počítá akci 3+1 pouze pro utěrky (při 3+ kusech utěrek je nejlevnější zdarma; zástěra do akce nevstupuje)
+- [x] **CART-06**: Stav košíku se zachová při obnovení stránky (localStorage)
+- [x] **CART-07**: Košík je viditelný/přístupný z navigace (ikona s počtem kusů)
 
 ### Objednávkový formulář
 
-- [ ] **ORDER-01**: Zákazník vyplní jméno a příjmení
-- [ ] **ORDER-02**: Zákazník vyplní e-mailovou adresu
-- [ ] **ORDER-03**: Zákazník vyplní telefonní číslo
-- [ ] **ORDER-04**: Zákazník vybere způsob doručení: Zásilkovna výdejní místo / Zásilkovna domů / Osobní odběr
-- [ ] **ORDER-05**: Při výběru "Zásilkovna výdejní místo" se zobrazí Packeta widget pro výběr pobočky z mapy
-- [ ] **ORDER-06**: Při výběru "Zásilkovna domů" se zobrazí pole pro doručovací adresu
-- [ ] **ORDER-07**: Zákazník může přidat nepovinnou poznámku k objednávce
-- [ ] **ORDER-08**: Zákazník musí odkliknout souhlas se zpracováním osobních údajů (GDPR) před odesláním
-- [ ] **ORDER-09**: Formulář validuje povinná pole před odesláním a zobrazí srozumitelné chybové hlášky
-- [ ] **ORDER-10**: Po odeslání se tlačítko deaktivuje (prevence duplicitních objednávek)
+- [x] **ORDER-01**: Zákazník vyplní jméno a příjmení
+- [x] **ORDER-02**: Zákazník vyplní e-mailovou adresu
+- [x] **ORDER-03**: Zákazník vyplní telefonní číslo
+- [x] **ORDER-04**: Zákazník vybere způsob doručení: Zásilkovna výdejní místo / Zásilkovna domů / Osobní odběr
+- [x] **ORDER-05**: Při výběru "Zásilkovna výdejní místo" se zobrazí Packeta widget pro výběr pobočky z mapy
+- [x] **ORDER-06**: Při výběru "Zásilkovna domů" se zobrazí pole pro doručovací adresu
+- [x] **ORDER-07**: Zákazník může přidat nepovinnou poznámku k objednávce
+- [x] **ORDER-08**: Zákazník musí odkliknout souhlas se zpracováním osobních údajů (GDPR) před odesláním
+- [x] **ORDER-09**: Formulář validuje povinná pole před odesláním a zobrazí srozumitelné chybové hlášky
+- [x] **ORDER-10**: Po odeslání se tlačítko deaktivuje (prevence duplicitních objednávek)
 
 ### E-mailové notifikace
 
 - [ ] **EMAIL-01**: Zákazník obdrží automatický potvrzovací e-mail se shrnutím objednávky
 - [ ] **EMAIL-02**: Míša obdrží e-mail s kompletními detaily objednávky (jméno, email, telefon, produkty, doručení, poznámka)
-- [ ] **EMAIL-03**: E-maily jsou odesílány přes EmailJS (CDN, bez backendu)
+- [x] **EMAIL-03**: E-maily jsou odesílány přes EmailJS (CDN, bez backendu)
 
 ### Navigace a UX
 
@@ -108,26 +108,26 @@
 | NAV-04 | Phase 1 | Done (01-02) |
 | LEGAL-01 | Phase 1 | Done (01-01) |
 | LEGAL-02 | Phase 1 | Done (01-01) |
-| CART-01 | Phase 2 | Pending |
+| CART-01 | Phase 2 | Complete |
 | CART-02 | Phase 2 | Pending |
 | CART-03 | Phase 2 | Pending |
 | CART-04 | Phase 2 | Pending |
-| CART-05 | Phase 2 | Pending |
-| CART-06 | Phase 2 | Pending |
-| CART-07 | Phase 2 | Pending |
-| ORDER-01 | Phase 3 | Pending |
-| ORDER-02 | Phase 3 | Pending |
-| ORDER-03 | Phase 3 | Pending |
-| ORDER-04 | Phase 3 | Pending |
-| ORDER-05 | Phase 3 | Pending |
-| ORDER-06 | Phase 3 | Pending |
-| ORDER-07 | Phase 3 | Pending |
-| ORDER-08 | Phase 3 | Pending |
-| ORDER-09 | Phase 3 | Pending |
-| ORDER-10 | Phase 3 | Pending |
+| CART-05 | Phase 2 | Complete |
+| CART-06 | Phase 2 | Complete |
+| CART-07 | Phase 2 | Complete |
+| ORDER-01 | Phase 3 | Complete |
+| ORDER-02 | Phase 3 | Complete |
+| ORDER-03 | Phase 3 | Complete |
+| ORDER-04 | Phase 3 | Complete |
+| ORDER-05 | Phase 3 | Complete |
+| ORDER-06 | Phase 3 | Complete |
+| ORDER-07 | Phase 3 | Complete |
+| ORDER-08 | Phase 3 | Complete |
+| ORDER-09 | Phase 3 | Complete |
+| ORDER-10 | Phase 3 | Complete |
 | EMAIL-01 | Phase 3 | Pending |
 | EMAIL-02 | Phase 3 | Pending |
-| EMAIL-03 | Phase 3 | Pending |
+| EMAIL-03 | Phase 3 | Complete |
 | SEO-01 | Phase 4 | Pending |
 | SEO-02 | Phase 4 | Pending |
 | SEO-03 | Phase 4 | Pending |
