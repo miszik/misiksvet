@@ -9,6 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- EmailJS CDN — musi byt pred cart.js a order.js scripty -->
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+  </script>
+  <script type="text/javascript">
+    (function(){
+      emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" });
+    })();
+  </script>
 </head>
 <body>
 
@@ -23,8 +33,34 @@
       <li><a href="#pribeh">Příběh</a></li>
       <li><a href="#produkty">Výrobky</a></li>
       <li><a href="#kontakt">Kontakt</a></li>
+      <li>
+        <button class="cart-nav-btn" aria-label="Otevřít košík" id="cart-nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-count" hidden>0</span>
+        </button>
+      </li>
     </ul>
   </nav>
+  <!-- Cart drawer — otevre se z prava pri kliknuti na ikonu kosiku -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__header">
+      <h2>Košík</h2>
+      <button class="cart-drawer__close" aria-label="Zavřít košík">✕</button>
+    </div>
+    <div id="cart-items" class="cart-drawer__items">
+      <!-- Dynamicky plneno cart.js -->
+    </div>
+    <div class="cart-drawer__footer">
+      <p class="cart-total"></p>
+      <p class="cart-discount" hidden></p>
+      <a href="#kontakt" class="btn btn--primary cart-checkout-btn">Přejít k objednávce</a>
+    </div>
+  </div>
+  <div id="cart-overlay" class="cart-overlay"></div>
 
   <section id="hero">
     <img src="fotky/20251208_190557.jpg" alt="Sbírka ručně vyšívaných lněných utěrek Mišik svět" class="hero__bg-img" width="1600" height="1200">
@@ -83,9 +119,65 @@
   </section>
 
   <section id="kontakt" class="section section--surface">
-    <h2>Kontakt</h2>
-    <p>Napište mi na Instagram – domluvíme motiv, počet kusů i&nbsp;termín.</p>
-    <a href="https://www.instagram.com/misiksvet/" class="btn btn--primary" target="_blank" rel="noopener noreferrer">@misiksvet na Instagramu</a>
+    <h2>Objednat</h2>
+    <p>Vyplňte formulář a objednávku odešlete. Platební instrukce vám pošleme e-mailem.</p>
+    <p class="kontakt-instagram">Nebo nás najdete na <a href="https://www.instagram.com/misiksvet/" target="_blank" rel="noopener">Instagramu @misiksvet</a>.</p>
+
+    <form id="order-form" novalidate>
+      <div class="form-group">
+        <label for="full_name">Jméno a příjmení *</label>
+        <input type="text" id="full_name" name="full_name" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefon *</label>
+        <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="+420 123 456 789">
+      </div>
+      <div class="form-group">
+        <label for="delivery">Způsob doručení *</label>
+        <select id="delivery" name="delivery" required>
+          <option value="">— Vyberte —</option>
+          <option value="packeta-vydejna">Zásilkovna — výdejní místo</option>
+          <option value="packeta-domu">Zásilkovna — doručení domů</option>
+          <option value="osobni-odber">Osobní odběr (Ostrava)</option>
+        </select>
+      </div>
+
+      <div id="packeta-section" hidden>
+        <button type="button" id="packeta-open-btn" class="btn btn--secondary">
+          Vybrat výdejní místo
+        </button>
+        <p id="packeta-selected-name" class="packeta-selected"></p>
+        <p id="packeta-error" class="form-error" hidden></p>
+      </div>
+
+      <div id="home-delivery-section" hidden>
+        <div class="form-group">
+          <label for="home_address">Doručovací adresa *</label>
+          <input type="text" id="home_address" name="home_address" autocomplete="street-address">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="note">Poznámka (nepovinné)</label>
+        <textarea id="note" name="note" rows="3"></textarea>
+      </div>
+
+      <div class="form-group form-group--checkbox">
+        <label>
+          <input type="checkbox" name="gdpr" required>
+          Souhlasím se zpracováním osobních údajů pro účely vyřízení objednávky. *
+        </label>
+      </div>
+
+      <p id="cart-error" class="form-error" hidden></p>
+      <button type="submit" id="submit-btn" class="btn btn--primary">Odeslat objednávku</button>
+      <p id="form-success" class="form-success" hidden>Objednávka odeslána! Potvrzení dorazí na váš e-mail.</p>
+      <p id="form-error" class="form-error" hidden>Něco se nepovedlo. Zkuste to prosím znovu nebo nás kontaktujte na Instagramu.</p>
+    </form>
   </section>
 
   <footer>
@@ -94,7 +186,10 @@
     <p class="legal">Pro vyřízení objednávky zpracováváme Vaše osobní údaje: jméno, e-mail a&nbsp;doručovací adresu. Údaje jsou použity výhradně k&nbsp;doručení zboží a&nbsp;nejsou předávány třetím stranám.</p>
   </footer>
 
+  <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
   <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/order.js"></script>
   <script src="js/main.js"></script>
 
 </body>
