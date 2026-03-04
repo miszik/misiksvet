@@ -1,12 +1,11 @@
 // js/main.js
 // Phase 1: renderovani produktovych karet + inicializace navigace
-// Phase 2 prida: inicializaci kosiku (cart.js)
+// Phase 2: inicializace kosiku (cart.js) — initCart() pridano
 // Phase 3 prida: inicializaci formulare (order.js)
 
 /**
  * Vyrenderuje produktove karty do #product-grid z PRODUCTS pole (products.js).
- * Phase 1: pouze vizualni karta — zadne tlacitko "Pridat do kosiku".
- * Phase 2 prida: <button class="btn-add" data-id="${p.id}">Pridat do kosiku</button>
+ * Phase 2: pridano tlacitko "Pridat do kosiku" s data-id pro cart.js delegovany listener.
  */
 function renderProductCards() {
   const grid = document.getElementById('product-grid');
@@ -26,6 +25,7 @@ function renderProductCards() {
         <p class="product-card__desc">${p.description}</p>
         <p class="product-card__material">${p.material}</p>
         <p class="product-card__price">${p.price}&nbsp;Kč</p>
+        <button class="btn btn--primary btn-add" data-id="${p.id}">Přidat do košíku</button>
       </div>
     </article>
   `).join('');
@@ -70,4 +70,6 @@ function initNav() {
 document.addEventListener('DOMContentLoaded', () => {
   renderProductCards();
   initNav();
+  initCart();
+  // initOrderForm(); — bude pridano v Planu 03
 });
