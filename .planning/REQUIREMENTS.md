@@ -7,11 +7,11 @@
 
 ### Prezentace produktů
 
-- [ ] **DISP-01**: Návštěvník vidí hero sekci s názvem značky, podtitulem a poetickým textem
-- [ ] **DISP-02**: Návštěvník vidí příběh autorky (sekce "O mně") s fotkou produktu
+- [x] **DISP-01**: Návštěvník vidí hero sekci s názvem značky, podtitulem a poetickým textem
+- [x] **DISP-02**: Návštěvník vidí příběh autorky (sekce "O mně") s fotkou produktu
 - [ ] **DISP-03**: Návštěvník vidí 4 produktové karty (kopretina 380 Kč, vlčí mák 380 Kč, šiška 380 Kč, zástěra 890 Kč) s fotkou, popisem, materiálem a cenou
-- [ ] **DISP-04**: Návštěvník vidí sekci hodnot (český len, strojová výšivka, krásné balení)
-- [ ] **DISP-05**: Návštěvník vidí banner akce 3+1
+- [x] **DISP-04**: Návštěvník vidí sekci hodnot (český len, strojová výšivka, krásné balení)
+- [x] **DISP-05**: Návštěvník vidí banner akce 3+1
 
 ### Košík
 
@@ -44,9 +44,9 @@
 
 ### Navigace a UX
 
-- [ ] **NAV-01**: Fixní horní navigace s logem vlevo a odkazy vpravo (Příběh · Výrobky · Kontakt)
+- [x] **NAV-01**: Fixní horní navigace s logem vlevo a odkazy vpravo (Příběh · Výrobky · Kontakt)
 - [ ] **NAV-02**: Na mobilu navigace přejde do hamburger menu nebo zmenšených odkazů
-- [ ] **NAV-03**: Web je plně responzivní, mobilní zobrazení je priorita
+- [x] **NAV-03**: Web je plně responzivní, mobilní zobrazení je priorita
 - [ ] **NAV-04**: Fade-in animace při načtení hero sekce
 
 ### SEO a nasazení
@@ -60,8 +60,8 @@
 
 ### Právní náležitosti
 
-- [ ] **LEGAL-01**: Stránka obsahuje informaci o 14denním právu na vrácení zboží
-- [ ] **LEGAL-02**: Stránka obsahuje stručné oznámení o zpracování osobních údajů (GDPR)
+- [x] **LEGAL-01**: Stránka obsahuje informaci o 14denním právu na vrácení zboží
+- [x] **LEGAL-02**: Stránka obsahuje stručné oznámení o zpracování osobních údajů (GDPR)
 
 ## v2 Requirements
 
@@ -97,17 +97,17 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DISP-01 | Phase 1 | Pending |
-| DISP-02 | Phase 1 | Pending |
-| DISP-03 | Phase 1 | Pending |
-| DISP-04 | Phase 1 | Pending |
-| DISP-05 | Phase 1 | Pending |
-| NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
-| NAV-03 | Phase 1 | Pending |
-| NAV-04 | Phase 1 | Pending |
-| LEGAL-01 | Phase 1 | Pending |
-| LEGAL-02 | Phase 1 | Pending |
+| DISP-01 | Phase 1 | Done (01-01) |
+| DISP-02 | Phase 1 | Done (01-01) |
+| DISP-03 | Phase 1 | Pending (01-02) |
+| DISP-04 | Phase 1 | Done (01-01) |
+| DISP-05 | Phase 1 | Done (01-01) |
+| NAV-01 | Phase 1 | Done (01-01) |
+| NAV-02 | Phase 1 | Pending (01-02) |
+| NAV-03 | Phase 1 | Done (01-01) |
+| NAV-04 | Phase 1 | Pending (01-02) |
+| LEGAL-01 | Phase 1 | Done (01-01) |
+| LEGAL-02 | Phase 1 | Done (01-01) |
 | CART-01 | Phase 2 | Pending |
 | CART-02 | Phase 2 | Pending |
 | CART-03 | Phase 2 | Pending |
@@ -137,4 +137,4 @@
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 — traceability added after roadmap creation*
+*Last updated: 2026-03-04 — DISP-01, DISP-02, DISP-04, DISP-05, NAV-01, NAV-03, LEGAL-01, LEGAL-02 marked complete after 01-01 execution*

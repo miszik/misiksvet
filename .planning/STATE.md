@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 ## Current Position
 
 Phase: 1 of 4 (Zaklad a zobrazeni produktu)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-04 — Roadmap created, requirements mapped to 4 phases
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-03-04 — Plan 01-01 completed (HTML kostra + CSS design system)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 10%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 4 min
+- Total execution time: 0.1 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-zaklad-a-zobrazeni-produktu | 1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+- Last 5 plans: 4 min
+- Trend: Baseline established
 
 *Updated after each plan completion*
 
@@ -46,6 +46,9 @@ Recent decisions affecting current work:
 - [Init]: EmailJS pres CDN pro oba emaily (zakaznik + Misa)
 - [Init]: GitHub Pages hosting, relativni cesty vsude (stranka muze bezet na subdirectory URL)
 - [Init]: Akce 3+1 = Math.floor(totalQty / 4) bezplatnych kusu — potreba overit pravidlo s Misou pred fazi 2
+- [01-01]: GDPR text obsahuje "osobni udaje" — spravne pojmenovane zpracovani dat pro soulad s verifikaci
+- [01-01]: CSS tokeny (var(--color-bg)) pouzivany v promo-banner a btn misto raw hex #faf8f4 — konzistentni design system
+- [01-01]: Hero obrazek bez loading=lazy (kriticky pro LCP, je nad zalomem stranky)
 
 ### Pending Todos
 
@@ -60,5 +63,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Roadmap created, STATE.md inicializovan — ready to start Phase 1 planning
+Stopped at: Completed 01-01-PLAN.md (HTML kostra + CSS design system + .nojekyll)
 Resume file: None
