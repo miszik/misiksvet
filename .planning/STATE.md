@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-04T19:29:00Z"
+last_updated: "2026-03-04T19:28:00Z"
 progress:
   total_phases: 1
   completed_phases: 1
   total_plans: 3
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 ## Current Position
 
 Phase: 5 of 5 (Kosik a objednavky a kontaktni formular)
-Plan: 2 of 3 in current phase
-Status: Phase 5 Plan 02 complete — ready for Plan 03 (order.js)
-Last activity: 2026-03-04 — Plan 05-02 completed (cart.js — cart state modul hotovy)
+Plan: 3 of 3 in current phase
+Status: Phase 5 Plan 03 complete — ready for Plan 04 (browser checkpoint)
+Last activity: 2026-03-04 — Plan 05-03 completed (order.js — formularova validace, Packeta widget, EmailJS send)
 
-Progress: [█████░░░░░] 53%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: [█████░░░░░] 53%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-zaklad-a-zobrazeni-produktu | 3 | 10 min | 3.3 min |
-| 05-kosik-a-objednavky-a-kontaktni-formular | 2 | 10 min | 5 min |
+| 05-kosik-a-objednavky-a-kontaktni-formular | 3 | 12 min | 4 min |
 
 **Recent Trend:**
 - Last 5 plans: 4 min, 1 min, ~5 min, 3 min
@@ -75,6 +75,10 @@ Recent decisions affecting current work:
 - [05-02]: calcPromo filtruje PRODUCTS[].type === 'uterka' — zastera nikdy nevstupuje do promo vypoctu
 - [05-02]: Math.floor(uterkyQty / 4) free kusu; sort ascending zajisti nejlevnejsi kusy jako free
 - [05-02]: initCart() musi byt az po renderProductCards() — btn-add tlacitka musi existovat pred delegovanym listenerem
+- [05-03]: emailjs.send() volan dvakrat sequentially (owner first, customer second) — owner notification ma prioritu
+- [05-03]: Submit tlacitko zusatva deaktivovane po uspesnem odeslani (zabranna duplicit), re-aktivuje se pouze pri chybe
+- [05-03]: Packeta vydejna validace zobrazuje inline error (ne browser bublinu) — packeta-error element handler
+- [05-03]: handleDeliveryChange cisti home_address a selectedPickupPoint pri prepnuti — ciste EmailJS params
 
 ### Roadmap Evolution
 
@@ -93,5 +97,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 05-02-PLAN.md (cart state modul — Phase 5 Plan 02 kompletni)
+Stopped at: Completed 05-03-PLAN.md (order.js — formularova validace, Packeta widget, EmailJS send kompletni)
 Resume file: None

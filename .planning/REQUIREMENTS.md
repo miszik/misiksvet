@@ -38,8 +38,8 @@
 
 ### E-mailové notifikace
 
-- [ ] **EMAIL-01**: Zákazník obdrží automatický potvrzovací e-mail se shrnutím objednávky
-- [ ] **EMAIL-02**: Míša obdrží e-mail s kompletními detaily objednávky (jméno, email, telefon, produkty, doručení, poznámka)
+- [x] **EMAIL-01**: Zákazník obdrží automatický potvrzovací e-mail se shrnutím objednávky
+- [x] **EMAIL-02**: Míša obdrží e-mail s kompletními detaily objednávky (jméno, email, telefon, produkty, doručení, poznámka)
 - [x] **EMAIL-03**: E-maily jsou odesílány přes EmailJS (CDN, bez backendu)
 
 ### Navigace a UX
@@ -125,8 +125,8 @@
 | ORDER-08 | Phase 3 | Complete |
 | ORDER-09 | Phase 3 | Complete |
 | ORDER-10 | Phase 3 | Complete |
-| EMAIL-01 | Phase 3 | Pending |
-| EMAIL-02 | Phase 3 | Pending |
+| EMAIL-01 | Phase 3 | Complete |
+| EMAIL-02 | Phase 3 | Complete |
 | EMAIL-03 | Phase 3 | Complete |
 | SEO-01 | Phase 4 | Pending |
 | SEO-02 | Phase 4 | Pending |
