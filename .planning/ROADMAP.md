@@ -29,7 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Navstevnik vidi sekci "O mne" s pribehem autorky a sekci hodnot (cesky len, vysivka, baleni)
   4. Navstevnik vidi banner akce 3+1 a informaci o 14dennim pravu na vraceni zbozi
   5. Navigace je funkci na mobilu (hamburger nebo zmensite odkazy) a stranka je plne responzivni
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — HTML kostra vsech sekci + kompletni CSS design system (mobile-first)
+- [ ] 01-02-PLAN.md — JS produktova data + navigace + .nojekyll
+- [ ] 01-03-PLAN.md — Finalni automatizovana kontrola + vizualni checkpoint s uzivatelkou
 
 ### Phase 2: Kosik a akce 3+1
 **Goal**: Zakaznik muze sestavit objednavku — pridat produkty, upravit mnozstvi, videt spravnou celkovou cenu vcetne slevy 3+1, a kosik prezije obnoveni stranky
@@ -73,7 +78,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Zaklad a zobrazeni produktu | 0/TBD | Not started | - |
+| 1. Zaklad a zobrazeni produktu | 0/3 | Planned | - |
 | 2. Kosik a akce 3+1 | 0/TBD | Not started | - |
 | 3. Objednavkovy formular a e-maily | 0/TBD | Not started | - |
 | 4. Nasazeni a finalni QA | 0/TBD | Not started | - |
