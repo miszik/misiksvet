@@ -111,13 +111,17 @@ Viz `05-03-SUMMARY.md` sekce "User Setup Required" pro detailni kroky.
 *Phase: 05-kosik-a-objednavky-a-kontaktni-formular*
 *Completed: 2026-03-05*
 
-## Self-Check: PASSED
+## Self-Check: PASSED (updated 2026-03-05 after Task 2 approval)
 
 - FOUND: js/cart.js
 - FOUND: js/order.js
 - FOUND: js/products.js
-- FOUND: js/order.js
 - FOUND: js/main.js
 - FOUND: .planning/phases/05-kosik-a-objednavky-a-kontaktni-formular/05-04-SUMMARY.md
+- FOUND: .planning/STATE.md (updated — Phase 5 kompletni, progress 100%)
+- FOUND: .planning/ROADMAP.md (updated — vsechny 4 Phase 5 plany [x])
+- FOUND commit: 7a1d09f (Task 1 — automatizovane kontroly)
+- FOUND commit: f436da9 (docs — Phase 5 complete, STATE + ROADMAP updated)
+- Task 2 browser verifikace: schvaleno Misou (zadny kod zmenen)
 - Automated checks: 15/15 PASSED
-- No source code commits required (read-only verification task)
+- Phase 5: KOMPLETNI
