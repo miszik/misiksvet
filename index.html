@@ -166,11 +166,14 @@
         </div>
       </div>
 
-      <!-- PPL výdejní místo: widget -->
+      <!-- PPL výdejní místo: widget (default mode = vlastní vyhledávač + mapa) -->
       <div id="ppl-box-section" hidden>
-        <button type="button" id="ppl-open-btn" class="btn btn--secondary">
-          Vybrat PPL výdejní místo
-        </button>
+        <div
+          id="ppl-parcelshop-map"
+          data-language="cs"
+          data-country="cz"
+          data-mode="default">
+        </div>
         <p id="ppl-selected-name" class="pickup-selected"></p>
         <p id="ppl-error" class="form-error" hidden></p>
       </div>
@@ -224,22 +227,7 @@
   </div>
   <div id="balikovna-overlay" class="pickup-overlay"></div>
 
-  <!-- PPL widget modal (JS widget renderovaný do divu) -->
-  <div id="ppl-modal" class="pickup-modal ppl-modal--hidden" aria-modal="true" role="dialog" aria-label="Výběr PPL výdejního místa">
-    <div class="pickup-modal__inner">
-      <button type="button" id="ppl-modal-close" class="pickup-modal__close" aria-label="Zavřít">✕</button>
-      <div
-        id="ppl-parcelshop-map"
-        data-language="cs"
-        data-country="cz"
-        data-mode="static"
-        class="pickup-modal__widget">
-      </div>
-    </div>
-  </div>
-  <div id="ppl-overlay" class="pickup-overlay"></div>
-
-  <!-- PPL widget JS — načte se po stránce, inicializuje #ppl-parcelshop -->
+  <!-- PPL widget JS — načte se po stránce, inicializuje #ppl-parcelshop-map -->
   <script src="https://www.ppl.cz/sources/map/main.js" defer></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>

@@ -55,24 +55,7 @@ function handleBalikovnaMessage(event) {
 
 // ── PPL widget (JS event na document) ────────────────────────────────────────
 
-function openPplModal() {
-  const modal = document.getElementById('ppl-modal');
-  const overlay = document.getElementById('ppl-overlay');
-  if (modal) modal.classList.remove('ppl-modal--hidden');
-  if (overlay) overlay.classList.add('is-active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closePplModal() {
-  const modal = document.getElementById('ppl-modal');
-  const overlay = document.getElementById('ppl-overlay');
-  if (modal) modal.classList.add('ppl-modal--hidden');
-  if (overlay) overlay.classList.remove('is-active');
-  document.body.style.overflow = '';
-}
-
 function handlePplSelection(event) {
-  // DEBUG — dočasně logujeme detail pro ověření struktury dat
   console.log('[PPL] event.detail:', event.detail);
 
   const point = event.detail;
@@ -133,23 +116,25 @@ async function fetchAddressSuggestions(query, dropdown, inputEl) {
 
   try {
     const url = 'https://api.mapy.com/v1/suggest?query=' + encodeURIComponent(query)
-      + '&apikey=' + MAPY_API_KEY + '&lang=cs&limit=5&type=regional';
+      + '&apikey=' + MAPY_API_KEY + '&lang=cs&limit=5&type=regional.address,regional.street';
     const res = await fetch(url);
     if (!res.ok) return;
 
     const data = await res.json();
-    const items = (data.items || []).filter(i => i.label);
+    const items = (data.items || []).filter(i => i.name);
 
     dropdown.innerHTML = '';
     if (items.length === 0) { dropdown.hidden = true; return; }
 
     items.forEach(item => {
+      // label = typ entity ("ulice", "obec") — pro zobrazení použijeme name + location
+      const displayText = item.name + (item.location ? ', ' + item.location : '');
       const li = document.createElement('li');
       li.className = 'address-suggestions__item';
-      li.textContent = item.label;
+      li.textContent = displayText;
       li.addEventListener('mousedown', (e) => {
-        e.preventDefault(); // zabránit blur před klikem
-        inputEl.value = item.label;
+        e.preventDefault();
+        inputEl.value = displayText;
         inputEl.setCustomValidity('');
         dropdown.hidden = true;
       });
@@ -388,9 +373,5 @@ function initOrderForm() {
   initAddressAutocomplete(document.getElementById('balikovna_address'));
   initAddressAutocomplete(document.getElementById('home_address'));
 
-  // PPL modal
-  document.getElementById('ppl-open-btn')?.addEventListener('click', openPplModal);
-  document.getElementById('ppl-modal-close')?.addEventListener('click', closePplModal);
-  document.getElementById('ppl-overlay')?.addEventListener('click', closePplModal);
   document.addEventListener('ppl-parcelshop-map', handlePplSelection);
 }
