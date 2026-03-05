@@ -4,7 +4,7 @@
 // Zavisi na: cart.js (loadCart, calcTotal, clearCart — musi byt nacten drive)
 // EmailJS je inicializovan v <head> index.html.
 
-const MAPY_API_KEY = 'YOUR_MAPY_API_KEY'; // Registrace zdarma: developer.mapy.com (Seznam účet)
+const MAPY_API_KEY = 'hRzqOVyudWJ2JpIpbNjCnk4WZ1ZL6zzpyZ6xk8QQ380';
 
 const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
 const EMAILJS_CUSTOMER_TEMPLATE = 'YOUR_CUSTOMER_TEMPLATE_ID';
