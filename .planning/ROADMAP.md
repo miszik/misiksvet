@@ -88,10 +88,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 **Goal:** Zakaznik muze pridat produkty do kosiku, sestavit objednavku s dorucenimi a odeslat ji — kosik je interaktivni, promo 3+1 se spravne pocita a emaily jsou odesilany pres EmailJS
 **Requirements**: CART-01, CART-02, CART-03, CART-04, CART-05, CART-06, CART-07, ORDER-01, ORDER-02, ORDER-03, ORDER-04, ORDER-05, ORDER-06, ORDER-07, ORDER-08, ORDER-09, ORDER-10, EMAIL-01, EMAIL-02, EMAIL-03
 **Depends on:** Phase 1 (implementace), Phase 4 (pro EmailJS/Packeta klice pred spustenim)
-**Plans:** 4/4 plans complete
+**Plans:** 4/4 plans complete — KOMPLETNI (schvaleno Misou 2026-03-05)
 
 Plans:
-- [ ] 05-01-PLAN.md — HTML/CSS scaffold: CDN scripty, cart ikona, cart drawer, order form, products.js type pole
-- [ ] 05-02-PLAN.md — js/cart.js: cart state modul (localStorage, promo 3+1, drawer, nav badge)
-- [ ] 05-03-PLAN.md — js/order.js: formularova validace, Packeta widget, EmailJS send
-- [ ] 05-04-PLAN.md — Automatizovana kontrola + vizualni checkpoint
+- [x] 05-01-PLAN.md — HTML/CSS scaffold: CDN scripty, cart ikona, cart drawer, order form, products.js type pole
+- [x] 05-02-PLAN.md — js/cart.js: cart state modul (localStorage, promo 3+1, drawer, nav badge)
+- [x] 05-03-PLAN.md — js/order.js: formularova validace, Packeta widget, EmailJS send
+- [x] 05-04-PLAN.md — Automatizovana kontrola + vizualni checkpoint (schvaleno Misou 2026-03-05)
