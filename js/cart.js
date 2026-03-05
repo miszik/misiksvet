@@ -199,6 +199,10 @@ function initCart() {
   const overlay = document.getElementById('cart-overlay');
   if (overlay) overlay.addEventListener('click', closeDrawer);
 
+  // Prejit k objednavce — zavre drawer a scrollne na formular
+  const checkoutBtn = document.querySelector('.cart-checkout-btn');
+  if (checkoutBtn) checkoutBtn.addEventListener('click', closeDrawer);
+
   // Qty +/- a remove — delegovane na cart-items
   const itemsEl = document.getElementById('cart-items');
   if (itemsEl) {
