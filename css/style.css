@@ -739,20 +739,141 @@ footer a {
   flex-shrink: 0;
 }
 
-#packeta-section,
+#balikovna-section,
+#balikovna-domu-section,
+#ppl-box-section,
 #home-delivery-section {
   margin-bottom: 1.25rem;
 }
 
-.packeta-selected {
+.pickup-selected {
   font-size: 0.9rem;
   margin-top: 0.5rem;
   color: #2a7a2a;
 }
 
+/* Balíkovna modal */
+.pickup-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.pickup-modal[hidden] {
+  display: none;
+}
+
+.pickup-modal__inner {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 640px;
+  height: 80vh;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.pickup-modal__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.pickup-modal__iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+}
+
+/* PPL widget renderuje mapu do divu — potřebuje být v DOMu (ne display:none), proto používáme CSS třídu */
+.ppl-modal--hidden {
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Adresa autocomplete dropdown */
+.address-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.address-suggestions__item {
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  line-height: 1.4;
+}
+
+.address-suggestions__item:last-child {
+  border-bottom: none;
+}
+
+.address-suggestions__item:hover,
+.address-suggestions__item:focus {
+  background: var(--color-bg);
+}
+
+.pickup-modal__widget {
+  width: 100%;
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pickup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(0,0,0,0.5);
+  display: none;
+}
+
+.pickup-overlay.is-active {
+  display: block;
+}
+
 .form-error {
   color: #c0392b;
   font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.form-hint {
+  color: #888;
+  font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 

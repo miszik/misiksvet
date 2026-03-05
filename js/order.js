@@ -1,69 +1,216 @@
 // js/order.js
-// Objednavkovy formular: validace, Packeta widget, EmailJS send.
+// Objednavkovy formular: validace, Balíkovna widget (iframe + postMessage),
+// PPL widget (JS event), EmailJS send.
 // Zavisi na: cart.js (loadCart, calcTotal, clearCart — musi byt nacten drive)
 // EmailJS je inicializovan v <head> index.html.
-// Packeta.Widget je dostupny pres synchronni CDN script v <body> pred timto souborem.
 
-const PACKETA_API_KEY = 'YOUR_PACKETA_API_KEY'; // Doplni Misa z client.packeta.com
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';   // Doplni Misa z EmailJS dashboard
-const EMAILJS_CUSTOMER_TEMPLATE = 'YOUR_CUSTOMER_TEMPLATE_ID'; // "customer_confirmation"
-const EMAILJS_OWNER_TEMPLATE = 'YOUR_OWNER_TEMPLATE_ID';       // "owner_notification"
+const MAPY_API_KEY = 'YOUR_MAPY_API_KEY'; // Registrace zdarma: developer.mapy.com (Seznam účet)
 
-let selectedPickupPoint = null; // Ulozi vybrany Packeta bod
+const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+const EMAILJS_CUSTOMER_TEMPLATE = 'YOUR_CUSTOMER_TEMPLATE_ID';
+const EMAILJS_OWNER_TEMPLATE = 'YOUR_OWNER_TEMPLATE_ID';
 
-// ── Packeta widget ────────────────────────────────────────────────────────────
+let selectedBalikovna = null; // { name, address, id }
+let selectedPplPoint  = null; // { name, address, code }
 
-function openPacketaWidget() {
-  const options = {
-    language: 'cs',
-    country: 'cz',
-    view: 'modal',
-    valueFormat: '"Packeta",id,name,city,street',
-    vendors: [{ country: 'cz' }]
+// ── Balíkovna widget (iframe + postMessage) ───────────────────────────────────
+
+function openBalikovnaModal() {
+  const modal = document.getElementById('balikovna-modal');
+  const overlay = document.getElementById('balikovna-overlay');
+  if (modal) modal.hidden = false;
+  if (overlay) overlay.classList.add('is-active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBalikovnaModal() {
+  const modal = document.getElementById('balikovna-modal');
+  const overlay = document.getElementById('balikovna-overlay');
+  if (modal) modal.hidden = true;
+  if (overlay) overlay.classList.remove('is-active');
+  document.body.style.overflow = '';
+}
+
+function handleBalikovnaMessage(event) {
+  if (!event.origin.includes('cpost.cz') && !event.origin.includes('balikovna.cz')) return;
+
+  const data = event.data;
+  if (!data || data.message !== 'pickerResult') return;
+
+  const point = data.point;
+  if (!point || !point.name) return;
+
+  selectedBalikovna = {
+    name:    point.name,
+    address: point.address || '',
+    id:      point.id || ''
   };
 
-  Packeta.Widget.pick(PACKETA_API_KEY, function(point) {
-    if (point) {
-      selectedPickupPoint = point;
-      const nameEl = document.getElementById('packeta-selected-name');
-      if (nameEl) nameEl.textContent = point.name + ', ' + point.city;
-      const errEl = document.getElementById('packeta-error');
-      if (errEl) errEl.hidden = true;
-    }
-  }, options);
+  const nameEl = document.getElementById('balikovna-selected-name');
+  if (nameEl) nameEl.textContent = point.name + (point.address ? ', ' + point.address : '');
+
+  hideFieldError('balikovna-error');
+  closeBalikovnaModal();
+}
+
+// ── PPL widget (JS event na document) ────────────────────────────────────────
+
+function openPplModal() {
+  const modal = document.getElementById('ppl-modal');
+  const overlay = document.getElementById('ppl-overlay');
+  if (modal) modal.classList.remove('ppl-modal--hidden');
+  if (overlay) overlay.classList.add('is-active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePplModal() {
+  const modal = document.getElementById('ppl-modal');
+  const overlay = document.getElementById('ppl-overlay');
+  if (modal) modal.classList.add('ppl-modal--hidden');
+  if (overlay) overlay.classList.remove('is-active');
+  document.body.style.overflow = '';
+}
+
+function handlePplSelection(event) {
+  // DEBUG — dočasně logujeme detail pro ověření struktury dat
+  console.log('[PPL] event.detail:', event.detail);
+
+  const point = event.detail;
+  if (!point) return;
+
+  // PPL event.detail — ověříme klíče po prvním testu
+  const name    = point.name || point.Name || '';
+  const city    = point.city || point.City || '';
+  const street  = point.street || point.Street || point.address || '';
+  const code    = point.code || point.Code || point.id || '';
+
+  if (!name) return;
+
+  const addressParts = [street, city].filter(Boolean);
+  selectedPplPoint = {
+    name:    name,
+    address: addressParts.join(', '),
+    code:    code
+  };
+
+  const nameEl = document.getElementById('ppl-selected-name');
+  if (nameEl) nameEl.textContent = name + (addressParts.length ? ', ' + addressParts.join(', ') : '');
+
+  hideFieldError('ppl-error');
+  closePplModal();
+}
+
+// ── Adresa autocomplete (Mapy.cz Suggest API) ────────────────────────────────
+
+function initAddressAutocomplete(inputEl) {
+  if (!inputEl) return;
+
+  const wrapper = inputEl.closest('.form-group');
+  if (!wrapper) return;
+  wrapper.style.position = 'relative';
+
+  const dropdown = document.createElement('ul');
+  dropdown.className = 'address-suggestions';
+  dropdown.hidden = true;
+  wrapper.appendChild(dropdown);
+
+  let debounceTimer = null;
+
+  inputEl.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const query = inputEl.value.trim();
+    if (query.length < 3) { dropdown.hidden = true; return; }
+    debounceTimer = setTimeout(() => fetchAddressSuggestions(query, dropdown, inputEl), 300);
+  });
+
+  inputEl.addEventListener('blur', () => {
+    setTimeout(() => { dropdown.hidden = true; }, 150);
+  });
+}
+
+async function fetchAddressSuggestions(query, dropdown, inputEl) {
+  if (MAPY_API_KEY === 'YOUR_MAPY_API_KEY') return;
+
+  try {
+    const url = 'https://api.mapy.com/v1/suggest?query=' + encodeURIComponent(query)
+      + '&apikey=' + MAPY_API_KEY + '&lang=cs&limit=5&type=regional';
+    const res = await fetch(url);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    const items = (data.items || []).filter(i => i.label);
+
+    dropdown.innerHTML = '';
+    if (items.length === 0) { dropdown.hidden = true; return; }
+
+    items.forEach(item => {
+      const li = document.createElement('li');
+      li.className = 'address-suggestions__item';
+      li.textContent = item.label;
+      li.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // zabránit blur před klikem
+        inputEl.value = item.label;
+        inputEl.setCustomValidity('');
+        dropdown.hidden = true;
+      });
+      dropdown.appendChild(li);
+    });
+
+    dropdown.hidden = false;
+  } catch (err) {
+    console.error('Mapy.cz suggest error:', err);
+  }
 }
 
 // ── Delivery select handler ───────────────────────────────────────────────────
 
 function handleDeliveryChange(value) {
-  const packetaSection = document.getElementById('packeta-section');
-  const homeSection = document.getElementById('home-delivery-section');
-  const homeAddressInput = document.querySelector('[name="home_address"]');
+  const sections = {
+    'balikovna-vydejna': 'balikovna-section',
+    'balikovna-domu':    'balikovna-domu-section',
+    'ppl-box':           'ppl-box-section',
+    'ppl-domu':          'home-delivery-section'
+  };
 
-  if (packetaSection) packetaSection.hidden = value !== 'packeta-vydejna';
-  if (homeSection) homeSection.hidden = value !== 'packeta-domu';
+  // Skryj všechny sekce
+  Object.values(sections).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.hidden = true;
+  });
 
-  // Vycisti hodnoty skrytych poli — jinak by se dostaly do emailu
-  if (value !== 'packeta-vydejna') {
-    selectedPickupPoint = null;
-    const nameEl = document.getElementById('packeta-selected-name');
-    if (nameEl) nameEl.textContent = '';
+  // Zobraz relevantní sekci
+  const activeId = sections[value];
+  if (activeId) {
+    const el = document.getElementById(activeId);
+    if (el) el.hidden = false;
   }
-  if (value !== 'packeta-domu' && homeAddressInput) {
-    homeAddressInput.value = '';
+
+  // Vycisti hodnoty skrytych poli
+  if (value !== 'balikovna-vydejna') {
+    selectedBalikovna = null;
+    const el = document.getElementById('balikovna-selected-name');
+    if (el) el.textContent = '';
+  }
+  if (value !== 'ppl-box') {
+    selectedPplPoint = null;
+    const el = document.getElementById('ppl-selected-name');
+    if (el) el.textContent = '';
+  }
+  if (value !== 'balikovna-domu') {
+    const input = document.querySelector('[name="balikovna_address"]');
+    if (input) input.value = '';
+  }
+  if (value !== 'ppl-domu') {
+    const input = document.querySelector('[name="home_address"]');
+    if (input) input.value = '';
   }
 }
 
 // ── Form validation ──────────────────────────────────────────────────────────
-// Pouzivame novalidate na formu + manualni validaci pro ceske hlasky.
-// setCustomValidity() + reportValidity() zobrazi browser bublinu s ceskou zpravou.
 
 function showFieldError(elId, message) {
   const el = document.getElementById(elId);
-  if (el) {
-    el.textContent = message;
-    el.hidden = false;
-  }
+  if (el) { el.textContent = message; el.hidden = false; }
 }
 
 function hideFieldError(elId) {
@@ -74,28 +221,12 @@ function hideFieldError(elId) {
 function validateForm() {
   let valid = true;
 
-  // Standardni povinne fieldy s Czech hlasky
   const fieldValidations = [
-    {
-      el: document.querySelector('[name="full_name"]'),
-      msg: 'Vyplňte prosím jméno a příjmení.'
-    },
-    {
-      el: document.querySelector('[name="email"]'),
-      msg: 'Zadejte platnou e-mailovou adresu.'
-    },
-    {
-      el: document.querySelector('[name="phone"]'),
-      msg: 'Zadejte telefonní číslo (např. +420 123 456 789).'
-    },
-    {
-      el: document.querySelector('[name="delivery"]'),
-      msg: 'Vyberte způsob doručení.'
-    },
-    {
-      el: document.querySelector('[name="gdpr"]'),
-      msg: 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.'
-    }
+    { el: document.querySelector('[name="full_name"]'), msg: 'Vyplňte prosím jméno a příjmení.' },
+    { el: document.querySelector('[name="email"]'),     msg: 'Zadejte platnou e-mailovou adresu.' },
+    { el: document.querySelector('[name="phone"]'),     msg: 'Zadejte telefonní číslo (např. +420 123 456 789).' },
+    { el: document.querySelector('[name="delivery"]'),  msg: 'Vyberte způsob doručení.' },
+    { el: document.querySelector('[name="gdpr"]'),      msg: 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.' }
   ];
 
   fieldValidations.forEach(({ el, msg }) => {
@@ -104,33 +235,45 @@ function validateForm() {
     if (!el.checkValidity()) {
       el.setCustomValidity(msg);
       el.reportValidity();
-      if (valid) el.focus(); // fokus na prvni chybne pole
+      if (valid) el.focus();
       valid = false;
     }
   });
 
-  // Podmínena validace: home_address kdyz delivery = packeta-domu
   const deliveryVal = document.querySelector('[name="delivery"]')?.value;
-  if (deliveryVal === 'packeta-domu') {
-    const homeInput = document.querySelector('[name="home_address"]');
-    if (homeInput && !homeInput.value.trim()) {
-      homeInput.setCustomValidity('Vyplňte doručovací adresu.');
-      homeInput.reportValidity();
-      valid = false;
-    } else if (homeInput) {
-      homeInput.setCustomValidity('');
-    }
-  }
 
-  // Packeta bod: vybran kdyz delivery = packeta-vydejna
-  if (deliveryVal === 'packeta-vydejna' && !selectedPickupPoint) {
-    showFieldError('packeta-error', 'Vyberte prosím výdejní místo Zásilkovny.');
+  if (deliveryVal === 'balikovna-vydejna' && !selectedBalikovna) {
+    showFieldError('balikovna-error', 'Vyberte prosím pobočku Balíkovny.');
     valid = false;
   } else {
-    hideFieldError('packeta-error');
+    hideFieldError('balikovna-error');
   }
 
-  // Prazdny kosik
+  if (deliveryVal === 'balikovna-domu') {
+    const input = document.querySelector('[name="balikovna_address"]');
+    if (input && !input.value.trim()) {
+      input.setCustomValidity('Vyplňte doručovací adresu.');
+      input.reportValidity();
+      valid = false;
+    } else if (input) { input.setCustomValidity(''); }
+  }
+
+  if (deliveryVal === 'ppl-box' && !selectedPplPoint) {
+    showFieldError('ppl-error', 'Vyberte prosím PPL výdejní místo.');
+    valid = false;
+  } else {
+    hideFieldError('ppl-error');
+  }
+
+  if (deliveryVal === 'ppl-domu') {
+    const input = document.querySelector('[name="home_address"]');
+    if (input && !input.value.trim()) {
+      input.setCustomValidity('Vyplňte doručovací adresu.');
+      input.reportValidity();
+      valid = false;
+    } else if (input) { input.setCustomValidity(''); }
+  }
+
   const cart = loadCart();
   if (cart.length === 0) {
     showFieldError('cart-error', 'Košík je prázdný. Přidejte prosím produkty před odesláním.');
@@ -143,7 +286,6 @@ function validateForm() {
 }
 
 // ── Cart summary formatter ────────────────────────────────────────────────────
-// Generuje textovy prehled kosiku pro emailjs params.
 
 function formatCartSummary(cart) {
   const lines = cart.map(item => {
@@ -152,10 +294,8 @@ function formatCartSummary(cart) {
     return product.name + ' x' + item.qty + ' = ' + (product.price * item.qty) + ' Kč';
   }).filter(Boolean);
 
-  const { gross, discount, net } = calcTotal(cart);
-  if (discount > 0) {
-    lines.push('Sleva akce 3+1: −' + discount + ' Kč');
-  }
+  const { discount, net } = calcTotal(cart);
+  if (discount > 0) lines.push('Sleva akce 3+1: −' + discount + ' Kč');
   lines.push('CELKEM: ' + net + ' Kč');
   return lines.join('\n');
 }
@@ -163,19 +303,14 @@ function formatCartSummary(cart) {
 // ── Form submit handler ───────────────────────────────────────────────────────
 
 async function handleFormSubmit(e) {
-  e.preventDefault(); // MUSI byt prvni — zabranni reload stranky na GitHub Pages
-
+  e.preventDefault();
   if (!validateForm()) return;
 
   const submitBtn = document.getElementById('submit-btn');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Odesílám…';
-  }
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Odesílám…'; }
 
-  // Schovej predchozi stavove zpravy
   const successEl = document.getElementById('form-success');
-  const errorEl = document.getElementById('form-error');
+  const errorEl   = document.getElementById('form-error');
   if (successEl) successEl.hidden = true;
   if (errorEl) errorEl.hidden = true;
 
@@ -185,49 +320,48 @@ async function handleFormSubmit(e) {
 
   const deliveryEl = document.querySelector('[name="delivery"]');
   const deliveryLabels = {
-    'packeta-vydejna': 'Zásilkovna — výdejní místo',
-    'packeta-domu': 'Zásilkovna — doručení domů',
-    'osobni-odber': 'Osobní odběr (Ostrava)'
+    'balikovna-vydejna': 'Balíkovna — výdejní místo (75 Kč)',
+    'balikovna-domu':    'Balíkovna — domů (89 Kč)',
+    'ppl-box':           'PPL — výdejní místo (79 Kč)',
+    'ppl-domu':          'PPL — domů (106 Kč)',
+    'osobni-odber':      'Osobní odběr (Ostrava)'
   };
   const deliveryLabel = deliveryLabels[deliveryEl?.value] || deliveryEl?.value || '';
+
+  const pickupPoint = selectedBalikovna
+    ? selectedBalikovna.name + ', ' + selectedBalikovna.address
+    : selectedPplPoint
+      ? selectedPplPoint.name + ', ' + selectedPplPoint.address
+      : '—';
+
+  const homeAddress = document.querySelector('[name="balikovna_address"]')?.value
+    || document.querySelector('[name="home_address"]')?.value
+    || '—';
 
   const params = {
     full_name:    document.querySelector('[name="full_name"]')?.value || '',
     email:        document.querySelector('[name="email"]')?.value || '',
     phone:        document.querySelector('[name="phone"]')?.value || '',
     delivery:     deliveryLabel,
-    pickup_point: selectedPickupPoint
-      ? selectedPickupPoint.name + ', ' + selectedPickupPoint.city
-      : '—',
-    home_address: document.querySelector('[name="home_address"]')?.value || '—',
+    pickup_point: pickupPoint,
+    home_address: homeAddress,
     note:         document.querySelector('[name="note"]')?.value || '—',
     cart_summary: cartSummary,
     total:        net + ' Kč'
   };
 
   try {
-    // 1. Notifikace Mise
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OWNER_TEMPLATE, params);
-    // 2. Potvrzeni zakaznikovi
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE, params);
 
-    // Uspech
     if (successEl) successEl.hidden = false;
-    if (submitBtn) {
-      submitBtn.textContent = 'Odesláno ✓';
-      // Tlacitko zusatva deaktivovano po uspesnem odeslani — zabranna duplicit
-    }
-
-    clearCart(); // Smaze localStorage a re-renderuje prazdny kosik
+    if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
+    clearCart();
 
   } catch (err) {
     console.error('EmailJS error:', err);
     if (errorEl) errorEl.hidden = false;
-    // Re-aktivuj tlacitko pouze pri chybe — uzivatel muze zkusit znovu
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Odeslat objednávku';
-    }
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Odeslat objednávku'; }
   }
 }
 
@@ -244,8 +378,19 @@ function initOrderForm() {
     deliverySelect.addEventListener('change', (e) => handleDeliveryChange(e.target.value));
   }
 
-  const packetaBtn = document.getElementById('packeta-open-btn');
-  if (packetaBtn) {
-    packetaBtn.addEventListener('click', openPacketaWidget);
-  }
+  // Balíkovna modal
+  document.getElementById('balikovna-open-btn')?.addEventListener('click', openBalikovnaModal);
+  document.getElementById('balikovna-modal-close')?.addEventListener('click', closeBalikovnaModal);
+  document.getElementById('balikovna-overlay')?.addEventListener('click', closeBalikovnaModal);
+  window.addEventListener('message', handleBalikovnaMessage);
+
+  // Autocomplete pro adresní pole
+  initAddressAutocomplete(document.getElementById('balikovna_address'));
+  initAddressAutocomplete(document.getElementById('home_address'));
+
+  // PPL modal
+  document.getElementById('ppl-open-btn')?.addEventListener('click', openPplModal);
+  document.getElementById('ppl-modal-close')?.addEventListener('click', closePplModal);
+  document.getElementById('ppl-overlay')?.addEventListener('click', closePplModal);
+  document.addEventListener('ppl-parcelshop-map', handlePplSelection);
 }

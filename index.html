@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- PPL widget CSS -->
+  <link rel="stylesheet" href="https://www.ppl.cz/sources/map/main.css">
   <!-- EmailJS CDN — musi byt pred cart.js a order.js scripty -->
   <script
     type="text/javascript"
@@ -45,15 +47,14 @@
       </li>
     </ul>
   </nav>
-  <!-- Cart drawer — otevre se z prava pri kliknuti na ikonu kosiku -->
+
+  <!-- Cart drawer -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
     <div class="cart-drawer__header">
       <h2>Košík</h2>
       <button class="cart-drawer__close" aria-label="Zavřít košík">✕</button>
     </div>
-    <div id="cart-items" class="cart-drawer__items">
-      <!-- Dynamicky plneno cart.js -->
-    </div>
+    <div id="cart-items" class="cart-drawer__items"></div>
     <div class="cart-drawer__footer">
       <p class="cart-total"></p>
       <p class="cart-discount" hidden></p>
@@ -140,20 +141,41 @@
         <label for="delivery">Způsob doručení *</label>
         <select id="delivery" name="delivery" required>
           <option value="">— Vyberte —</option>
-          <option value="packeta-vydejna">Zásilkovna — výdejní místo</option>
-          <option value="packeta-domu">Zásilkovna — doručení domů</option>
-          <option value="osobni-odber">Osobní odběr (Ostrava)</option>
+          <option value="balikovna-vydejna">Balíkovna — výdejní místo (75 Kč)</option>
+          <option value="balikovna-domu">Balíkovna — domů (89 Kč)</option>
+          <option value="ppl-box">PPL — výdejní místo (79 Kč)</option>
+          <option value="ppl-domu">PPL — domů (106 Kč)</option>
+          <option value="osobni-odber">Osobní odběr (Ostrava) — zdarma</option>
         </select>
       </div>
 
-      <div id="packeta-section" hidden>
-        <button type="button" id="packeta-open-btn" class="btn btn--secondary">
-          Vybrat výdejní místo
+      <!-- Balíkovna výdejní místo: widget -->
+      <div id="balikovna-section" hidden>
+        <button type="button" id="balikovna-open-btn" class="btn btn--secondary">
+          Vybrat Balíkovnu na mapě
         </button>
-        <p id="packeta-selected-name" class="packeta-selected"></p>
-        <p id="packeta-error" class="form-error" hidden></p>
+        <p id="balikovna-selected-name" class="pickup-selected"></p>
+        <p id="balikovna-error" class="form-error" hidden></p>
       </div>
 
+      <!-- Balíkovna domů: adresní pole -->
+      <div id="balikovna-domu-section" hidden>
+        <div class="form-group">
+          <label for="balikovna_address">Doručovací adresa *</label>
+          <input type="text" id="balikovna_address" name="balikovna_address" autocomplete="street-address">
+        </div>
+      </div>
+
+      <!-- PPL výdejní místo: widget -->
+      <div id="ppl-box-section" hidden>
+        <button type="button" id="ppl-open-btn" class="btn btn--secondary">
+          Vybrat PPL výdejní místo
+        </button>
+        <p id="ppl-selected-name" class="pickup-selected"></p>
+        <p id="ppl-error" class="form-error" hidden></p>
+      </div>
+
+      <!-- PPL domů: adresní pole -->
       <div id="home-delivery-section" hidden>
         <div class="form-group">
           <label for="home_address">Doručovací adresa *</label>
@@ -186,7 +208,39 @@
     <p class="legal">Pro vyřízení objednávky zpracováváme Vaše osobní údaje: jméno, e-mail a&nbsp;doručovací adresu. Údaje jsou použity výhradně k&nbsp;doručení zboží a&nbsp;nejsou předávány třetím stranám.</p>
   </footer>
 
-  <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
+  <!-- Balíkovna widget modal (iframe) -->
+  <div id="balikovna-modal" class="pickup-modal" hidden aria-modal="true" role="dialog" aria-label="Výběr Balíkovny">
+    <div class="pickup-modal__inner">
+      <button type="button" id="balikovna-modal-close" class="pickup-modal__close" aria-label="Zavřít">✕</button>
+      <iframe
+        id="balikovna-iframe"
+        src="https://b2c.cpost.cz/locations/?lang=cs"
+        title="Výběr Balíkovny"
+        class="pickup-modal__iframe"
+        allow="geolocation"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+  <div id="balikovna-overlay" class="pickup-overlay"></div>
+
+  <!-- PPL widget modal (JS widget renderovaný do divu) -->
+  <div id="ppl-modal" class="pickup-modal ppl-modal--hidden" aria-modal="true" role="dialog" aria-label="Výběr PPL výdejního místa">
+    <div class="pickup-modal__inner">
+      <button type="button" id="ppl-modal-close" class="pickup-modal__close" aria-label="Zavřít">✕</button>
+      <div
+        id="ppl-parcelshop-map"
+        data-language="cs"
+        data-country="cz"
+        data-mode="static"
+        class="pickup-modal__widget">
+      </div>
+    </div>
+  </div>
+  <div id="ppl-overlay" class="pickup-overlay"></div>
+
+  <!-- PPL widget JS — načte se po stránce, inicializuje #ppl-parcelshop -->
+  <script src="https://www.ppl.cz/sources/map/main.js" defer></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/order.js"></script>
