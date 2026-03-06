@@ -69,7 +69,11 @@ Plans:
   2. Sdileni odkazu na Instagramu nebo Facebooku zobrazuje spravny nahled (og:title, og:description, og:image)
   3. Vsechny obrazky maji alt texty a jsou ve WebP formatu pod 150 KB — stranka se nacte rychle na mobilnim pripojeni
   4. Stranka projde zakladnim mobilnim testem na realnem zarizeni (dotykovatelne prvky, spravne pismo, formular funguje)
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — SEO/OG meta tagy + WebP konverze vsech fotek + aktualizace img src
+- [ ] 04-02-PLAN.md — CNAME soubor + GitHub Pages deploy checklist + EmailJS konfigurace + mobilni verifikace
 
 ## Progress
 
@@ -81,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Zaklad a zobrazeni produktu | 3/3 | Complete | 2026-03-04 |
 | 2. Kosik a akce 3+1 | 0/TBD | Not started | - |
 | 3. Objednavkovy formular a e-maily | 0/TBD | Not started | - |
-| 4. Nasazeni a finalni QA | 0/TBD | Not started | - |
+| 4. Nasazeni a finalni QA | 0/2 | Planned | - |
 
 ### Phase 5: Kosik a objednavky a kontaktni formular
 
