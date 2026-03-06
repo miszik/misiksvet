@@ -446,6 +446,27 @@ function initOrderForm() {
 
   form.addEventListener('submit', handleFormSubmit);
 
+  // Blur validace — real-time feedback při vyplňování
+  const nameEl = document.querySelector('[name="full_name"]');
+  if (nameEl) nameEl.addEventListener('blur', () => {
+    if (!nameEl.value.trim()) showInputError(nameEl, 'Vyplňte prosím jméno a příjmení.');
+    else clearInputError(nameEl);
+  });
+
+  const emailEl = document.querySelector('[name="email"]');
+  if (emailEl) emailEl.addEventListener('blur', () => {
+    const val = emailEl.value.trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+    if (!val || !ok) showInputError(emailEl, 'Zadejte platnou e-mailovou adresu (např. jan@gmail.com).');
+    else clearInputError(emailEl);
+  });
+
+  const phoneEl = document.querySelector('[name="phone"]');
+  if (phoneEl) phoneEl.addEventListener('blur', () => {
+    if (!phoneEl.value.trim()) showInputError(phoneEl, 'Vyplňte prosím telefonní číslo.');
+    else clearInputError(phoneEl);
+  });
+
   const deliverySelect = document.querySelector('[name="delivery"]');
   if (deliverySelect) {
     deliverySelect.addEventListener('change', (e) => handleDeliveryChange(e.target.value));
