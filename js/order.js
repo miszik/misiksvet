@@ -329,7 +329,10 @@ function validateForm() {
     hideFieldError('cart-error');
   }
 
-  if (firstInvalid) firstInvalid.focus();
+  if (firstInvalid) {
+    firstInvalid.focus();
+    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
   return valid;
 }

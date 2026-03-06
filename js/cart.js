@@ -179,14 +179,13 @@ function initCart() {
   renderCart(cart);
   updateNavBadge(cart);
 
-  // "Pridat do kosiku" — delegovany listener na product-grid
-  const grid = document.getElementById('product-grid');
-  if (grid) {
+  // "Pridat do kosiku" — delegovany listener na vsechny product-grid sekce
+  document.querySelectorAll('.product-grid').forEach(grid => {
     grid.addEventListener('click', (e) => {
       const btn = e.target.closest('.btn-add');
       if (btn) addToCart(btn.dataset.id);
     });
-  }
+  });
 
   // Otevrit drawer kliknutim na nav ikonu
   const navBtn = document.getElementById('cart-nav-btn');
