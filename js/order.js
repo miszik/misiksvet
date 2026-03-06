@@ -7,8 +7,8 @@
 const MAPY_API_KEY = 'hRzqOVyudWJ2JpIpbNjCnk4WZ1ZL6zzpyZ6xk8QQ380';
 
 const EMAILJS_SERVICE_ID = 'service_mxzi2lg';
-const EMAILJS_CUSTOMER_TEMPLATE = 'template_1meyqyy';
-const EMAILJS_OWNER_TEMPLATE = 'template_68460i9';
+const EMAILJS_CUSTOMER_TEMPLATE = 'template_zlh7pzp';
+const EMAILJS_OWNER_TEMPLATE = 'template_nbof7pu';
 
 let selectedBalikovna = null; // { name, address, id }
 let selectedPplPoint  = null; // { name, address, code }
