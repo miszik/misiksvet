@@ -2,13 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-05T15:03:08.870Z"
+status: verifying
+stopped_at: Completed 04-01-PLAN.md — SEO/OG meta tagy a WebP konverze dokonceny
+last_updated: "2026-03-06T09:41:53.825Z"
+last_activity: 2026-03-05 — Plan 05-04 Task 2 (browser verifikace) schvalen Misou; Phase 5 kompletni
 progress:
-  total_phases: 2
+  total_phases: 5
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -22,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 
 ## Current Position
 
-Phase: 5 of 5 (Kosik a objednavky a kontaktni formular) — KOMPLETNI
-Plan: 4 of 4 in current phase — KOMPLETNI
-Status: Phase 5 kompletni — vsechny 4 plany dokonceny, browser verifikace schvalena Misou; pripraveno pro Phase 4 nasazeni
-Last activity: 2026-03-05 — Plan 05-04 Task 2 (browser verifikace) schvalen Misou; Phase 5 kompletni
+Phase: 4 of 5 (nasazeni-a-finalni-qa) — IN PROGRESS
+Plan: 1 of 2 in current phase — KOMPLETNI
+Status: Phase 4 Plan 1 dokoncen — SEO/OG meta tagy a WebP konverze hotovy; zbyvaji Plan 2 (GitHub Pages nasazeni)
+Last activity: 2026-03-06 — Plan 04-01 dokoncen (SEO/OG meta tagy, 5 WebP fotek pod 150 KB)
 
-Progress: [██████████] 100%
+Progress: [█████████░] 89%
 
 ## Performance Metrics
 
@@ -49,6 +52,7 @@ Progress: [██████████] 100%
 
 *Updated after each plan completion*
 | Phase 05-kosik-a-objednavky-a-kontaktni-formular P04 | 2 | 2 tasks | 0 files |
+| Phase 04-nasazeni-a-finalni-qa P01 | 3 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -83,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Vsechny 15 automatizovane kontroly prosly bez oprav — kod z Planu 02 a 03 byl spravne implementovan
 - [05-04]: Browser verifikace schvalena Misou bez oprav — cart tok, promo 3+1, formular i dorucovaci sekce funguje spravne v prohlizeci
 - [05-04]: Phase 5 kompletni — Phase 4 (SEO, GitHub Pages, domena) muze zacit
+- [Phase 04-01]: WebP konverze: q=60 + resize 900px sirky — original q=75 bez resize produkoval 1.5 MB soubory
+- [Phase 04-01]: Originalni JPG zachovany — WebP pojmenovany citelne (kopretina.webp, vlci-mak.webp atd.)
 
 ### Roadmap Evolution
 
@@ -100,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-05
-Stopped at: Completed 05-04-PLAN.md — Phase 5 kompletni, browser verifikace schvalena Misou
+Last session: 2026-03-06T09:41:53.820Z
+Stopped at: Completed 04-01-PLAN.md — SEO/OG meta tagy a WebP konverze dokonceny
 Resume file: None

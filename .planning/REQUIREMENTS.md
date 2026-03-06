@@ -51,12 +51,12 @@
 
 ### SEO a nasazení
 
-- [ ] **SEO-01**: Meta title a meta description pro vyhledávače
-- [ ] **SEO-02**: Open Graph tagy pro sdílení na sociálních sítích (Instagram, Facebook)
-- [ ] **SEO-03**: Alt texty u všech obrázků
+- [x] **SEO-01**: Meta title a meta description pro vyhledávače
+- [x] **SEO-02**: Open Graph tagy pro sdílení na sociálních sítích (Instagram, Facebook)
+- [x] **SEO-03**: Alt texty u všech obrázků
 - [ ] **DEPLOY-01**: Web je nasazen na GitHub Pages
 - [ ] **DEPLOY-02**: Vlastní doména misiksvet.cz nakonfigurována (CNAME)
-- [ ] **DEPLOY-03**: Fotky optimalizovány do WebP formátu (max 150 KB každá)
+- [x] **DEPLOY-03**: Fotky optimalizovány do WebP formátu (max 150 KB každá)
 
 ### Právní náležitosti
 
@@ -128,12 +128,12 @@
 | EMAIL-01 | Phase 3 | Complete |
 | EMAIL-02 | Phase 3 | Complete |
 | EMAIL-03 | Phase 3 | Complete |
-| SEO-01 | Phase 4 | Pending |
-| SEO-02 | Phase 4 | Pending |
-| SEO-03 | Phase 4 | Pending |
+| SEO-01 | Phase 4 | Complete |
+| SEO-02 | Phase 4 | Complete |
+| SEO-03 | Phase 4 | Complete |
 | DEPLOY-01 | Phase 4 | Pending |
 | DEPLOY-02 | Phase 4 | Pending |
-| DEPLOY-03 | Phase 4 | Pending |
+| DEPLOY-03 | Phase 4 | Complete |
 
 ---
 *Requirements defined: 2026-03-04*
