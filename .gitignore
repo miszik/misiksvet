@@ -1,0 +1,13 @@
+# Claude Code config
+.claude/
+
+# Pracovní soubory (nepotřebné pro web)
+kalkulace_vysivka_uterka_v2.xlsx
+zadani-web-misiksvet.md
+vystrizky/
+
+# Originální JPG fotky (web používá .webp verze)
+fotky/*.jpg
+
+# ChatGPT designové explorace (ne součást webu)
+obrazky/ChatGPT*
