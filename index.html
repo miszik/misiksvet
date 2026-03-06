@@ -219,6 +219,11 @@
         </label>
       </div>
 
+      <!-- Honeypot: skryto pred uzivateli, boti ho vyplni -->
+      <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+        <input type="text" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
       <p id="cart-error" class="form-error" hidden></p>
       <button type="submit" id="submit-btn" class="btn btn--primary">Odeslat objednávku</button>
       <p id="form-success" class="form-success" hidden>Objednávka odeslána! Potvrzení dorazí na váš e-mail.</p>

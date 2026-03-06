@@ -364,6 +364,24 @@ function formatCartSummary(cart) {
 
 async function handleFormSubmit(e) {
   e.preventDefault();
+
+  // Honeypot — bot vyplnil skryte pole
+  const honeypot = document.querySelector('[name="website"]');
+  if (honeypot && honeypot.value) return;
+
+  // Rate limiting — max 1 odeslani za 5 minut
+  const lastSent = parseInt(localStorage.getItem('ms_last_sent') || '0', 10);
+  const now = Date.now();
+  if (now - lastSent < 5 * 60 * 1000) {
+    const waitSec = Math.ceil((5 * 60 * 1000 - (now - lastSent)) / 1000);
+    const errorEl = document.getElementById('form-error');
+    if (errorEl) {
+      errorEl.textContent = 'Počkejte prosím ' + waitSec + ' sekund před dalším odesláním.';
+      errorEl.hidden = false;
+    }
+    return;
+  }
+
   if (!validateForm()) return;
 
   const submitBtn = document.getElementById('submit-btn');
@@ -425,6 +443,7 @@ async function handleFormSubmit(e) {
 
     if (successEl) successEl.hidden = false;
     if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
+    localStorage.setItem('ms_last_sent', String(Date.now()));
     clearCart();
 
   } catch (err) {
