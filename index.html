@@ -5,6 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mišik svět — Ručně vyšívané lněné výrobky</title>
   <meta name="description" content="Ručně vyšívané lněné utěrky a zástěry. Vyrobeno s&nbsp;láskou v&nbsp;Čechách.">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://misaz.github.io/misiksvet/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://misaz.github.io/misiksvet/">
+  <meta property="og:title" content="Mišik svět — Ručně vyšívané lněné výrobky">
+  <meta property="og:description" content="Ručně vyšívané lněné utěrky a zástěry. Vyrobeno s láskou v Čechách.">
+  <meta property="og:image" content="https://misaz.github.io/misiksvet/fotky/kopretina.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:site_name" content="Mišik svět">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mišik svět — Ručně vyšívané lněné výrobky">
+  <meta name="twitter:description" content="Ručně vyšívané lněné utěrky a zástěry. Vyrobeno s láskou v Čechách.">
+  <meta name="twitter:image" content="https://misaz.github.io/misiksvet/fotky/kopretina.webp">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
@@ -64,7 +85,7 @@
   <div id="cart-overlay" class="cart-overlay"></div>
 
   <section id="hero">
-    <img src="fotky/20251208_190557.jpg" alt="Sbírka ručně vyšívaných lněných utěrek Mišik svět" class="hero__bg-img" width="1600" height="1200">
+    <img src="fotky/kolekce.webp" alt="Sbírka ručně vyšívaných lněných utěrek Mišik svět" class="hero__bg-img" width="1600" height="1200">
     <div class="hero__content">
       <h1 class="hero__title">Mišik svět</h1>
       <p class="hero__subtitle">Ručně vyšívané lněné výrobky</p>
@@ -81,7 +102,7 @@
         <p>Každý kus je vyšitý s&nbsp;péčí, zabalený s&nbsp;láskou a&nbsp;připravený udělat radost – vám nebo někomu blízkému.</p>
       </div>
       <div class="story-image">
-        <img src="fotky/20251208_185910.jpg" alt="Ručně vyšívaná lněná utěrka s kopretinami z dílny Mišik svět" loading="lazy" width="600" height="800">
+        <img src="fotky/kopretina.webp" alt="Ručně vyšívaná lněná utěrka s kopretinami z dílny Mišik svět" loading="lazy" width="600" height="800">
       </div>
     </div>
   </section>
@@ -166,14 +187,11 @@
         </div>
       </div>
 
-      <!-- PPL výdejní místo: widget (default mode = vlastní vyhledávač + mapa) -->
+      <!-- PPL výdejní místo: widget (otevře se jako modal overlay) -->
       <div id="ppl-box-section" hidden>
-        <div
-          id="ppl-parcelshop-map"
-          data-language="cs"
-          data-country="cz"
-          data-mode="default">
-        </div>
+        <button type="button" id="ppl-open-btn" class="btn btn--secondary">
+          Vybrat PPL výdejní místo
+        </button>
         <p id="ppl-selected-name" class="pickup-selected"></p>
         <p id="ppl-error" class="form-error" hidden></p>
       </div>
@@ -226,6 +244,21 @@
     </div>
   </div>
   <div id="balikovna-overlay" class="pickup-overlay"></div>
+
+  <!-- PPL widget modal — visibility:hidden (ne display:none), aby widget mohl inicializovat -->
+  <div id="ppl-modal" class="pickup-modal ppl-modal--hidden" aria-modal="true" role="dialog" aria-label="Výběr PPL výdejního místa">
+    <div class="pickup-modal__inner">
+      <button type="button" id="ppl-modal-close" class="pickup-modal__close" aria-label="Zavřít">✕</button>
+      <div
+        id="ppl-parcelshop-map"
+        class="pickup-modal__widget"
+        data-language="cs"
+        data-country="cz"
+        data-mode="default">
+      </div>
+    </div>
+  </div>
+  <div id="ppl-overlay" class="pickup-overlay"></div>
 
   <!-- PPL widget JS — načte se po stránce, inicializuje #ppl-parcelshop-map -->
   <script src="https://www.ppl.cz/sources/map/main.js" defer></script>

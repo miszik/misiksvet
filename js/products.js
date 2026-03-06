@@ -8,7 +8,7 @@ const PRODUCTS = [
     id: 'kopretina',
     name: 'Utěrka Kopretina',
     price: 380,
-    image: 'fotky/20251208_185910.jpg',
+    image: 'fotky/kopretina.webp',
     description: 'Luční kopretiny na přírodním lnu. Jemný motiv ve třech barvách.',
     material: '100% český len',
     type: 'uterka'
@@ -17,7 +17,7 @@ const PRODUCTS = [
     id: 'vlci-mak',
     name: 'Utěrka Vlčí mák',
     price: 380,
-    image: 'fotky/20251208_190226.jpg',
+    image: 'fotky/vlci-mak.webp',
     description: 'Rudý květ vlčího máku s listy. Výrazný a elegantní.',
     material: '100% český len',
     type: 'uterka'
@@ -26,7 +26,7 @@ const PRODUCTS = [
     id: 'siska',
     name: 'Utěrka Šiška s větvičkou',
     price: 380,
-    image: 'fotky/20251208_190438.jpg',
+    image: 'fotky/siska.webp',
     description: 'Detailní šiška s jehličím. Ideální dárek pro milovníky přírody.',
     material: '100% český len',
     type: 'uterka'
@@ -35,7 +35,7 @@ const PRODUCTS = [
     id: 'zastera',
     name: 'Zástěra',
     price: 890,
-    image: 'fotky/20251115_111917.jpg',
+    image: 'fotky/zastera.webp',
     description: 'Lněná zástěra s kopretinou a humorem. \u201eNemám šajnu co z toho bude.\u201c',
     material: '100% český len',
     type: 'zastera'
