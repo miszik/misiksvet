@@ -327,6 +327,16 @@ nav.scrolled {
   margin-bottom: var(--space-xs);
 }
 
+.product-card__avail {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.product-card__avail span {
+  color: var(--color-brown);
+}
+
 .product-card__price {
   font-family: var(--font-heading);
   font-size: 1.3rem;
@@ -356,9 +366,14 @@ nav.scrolled {
 }
 
 .value-icon {
-  font-size: 2.5rem;
   display: block;
-  margin-bottom: var(--space-sm);
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 4px;
+  background-size: 290%;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: multiply;
 }
 
 .value-card h3 {
@@ -912,4 +927,217 @@ footer a {
 .btn--secondary:hover {
   background: var(--color-brown);
   color: var(--color-bg);
+}
+
+/* ============================================================
+   Nadpisy podsekcí produktů
+   ============================================================ */
+.product-section-heading {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-brown);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.product-section-heading:first-of-type {
+  margin-top: var(--space-sm);
+}
+
+/* ============================================================
+   Produktový detail modal
+   ============================================================ */
+#product-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#product-modal[hidden] { display: none; }
+
+.product-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.product-modal__box {
+  position: relative;
+  background: var(--color-bg);
+  border-radius: 6px;
+  max-width: 820px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 600px) {
+  .product-modal__box {
+    grid-template-columns: 1fr;
+    max-height: 95vh;
+  }
+}
+
+.product-modal__gallery {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-modal__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px 0 0 0;
+  display: block;
+}
+
+.product-modal__thumbs {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  background: var(--color-surface);
+  border-radius: 0 0 0 6px;
+}
+
+.product-modal__thumb {
+  width: 60px;
+  height: 60px;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+
+.product-modal__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-modal__thumb.active,
+.product-modal__thumb:hover {
+  border-color: var(--color-brown);
+}
+
+@media (max-width: 600px) {
+  .product-modal__img {
+    border-radius: 6px 6px 0 0;
+    max-height: 55vw;
+    aspect-ratio: auto;
+  }
+  .product-modal__thumbs {
+    border-radius: 0;
+  }
+}
+
+.product-modal__body {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.product-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--color-bg);
+  border: none;
+  font-size: 1.1rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.product-modal__name {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-brown);
+  margin: 0;
+}
+
+.product-modal__desc {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.product-modal__material {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.product-modal__avail {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.product-modal__avail span {
+  color: var(--color-brown);
+}
+
+.product-modal__size,
+.product-modal__uses {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.product-modal__properties,
+.product-modal__care {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.product-modal__properties li::before {
+  content: '✓\00a0';
+  color: var(--color-brown);
+}
+
+.product-modal__care li { display: inline; }
+.product-modal__care li + li::before { content: ' · '; }
+.product-modal__care .care-heading {
+  display: block;
+  color: var(--color-text-muted);
+  margin-bottom: 0.15rem;
+}
+.product-modal__care .care-heading::before { content: none; }
+
+.product-modal__price {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-brown);
+  margin: auto 0 0;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Kurzor pointer na kartach — naznacuje klikatelnost */
+.product-card {
+  cursor: pointer;
 }

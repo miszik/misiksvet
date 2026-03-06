@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obchodní podmínky — Mišik svět</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .podminky-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+    .podminky-wrap h1 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      color: var(--color-brown);
+      margin-bottom: 0.25rem;
+    }
+    .podminky-wrap .updated {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 2.5rem;
+    }
+    .podminky-wrap h2 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--color-brown);
+      margin: 2rem 0 0.5rem;
+    }
+    .podminky-wrap p,
+    .podminky-wrap li {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+    .podminky-wrap ul {
+      padding-left: 1.4rem;
+      margin: 0.5rem 0;
+    }
+    .podminky-wrap li {
+      margin-bottom: 0.3rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      color: var(--color-brown);
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .placeholder {
+      background: #fff3cd;
+      padding: 0.1em 0.3em;
+      border-radius: 2px;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="podminky-wrap">
+    <a href="index.html" class="back-link">&larr; Zpět na hlavní stránku</a>
+
+    <h1>Obchodní podmínky</h1>
+    <p class="updated">Platné od: <span id="op-date"></span></p>
+    <script>
+      const d = new Date();
+      document.getElementById('op-date').textContent =
+        d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+    </script>
+
+    <h2>1. Prodávající</h2>
+    <p>
+      Michaela Zíková<br>
+      Pod Rybníkem 66, Struhařov 251 64<br>
+      IČO: <span class="placeholder">bude doplněno</span><br>
+      E-mail: <a href="mailto:ms.zikova@seznam.cz">ms.zikova@seznam.cz</a><br>
+      Instagram: <a href="https://www.instagram.com/misiksvet/" target="_blank" rel="noopener">@misiksvet</a>
+    </p>
+    <p>
+      Fyzická osoba — podnikatel nezapsaný v obchodním rejstříku.
+      <span class="placeholder">(řádek smažte nebo doplňte po zápisu)</span>
+    </p>
+
+    <h2>2. Zboží a způsob výroby</h2>
+    <p>
+      Veškeré výrobky jsou vyráběné na zakázku — nejsou skladem.
+      Každý kus vzniká individuálně po přijetí objednávky.
+      Výrobky jsou zhotoveny z přírodních materiálů (len, bavlna); přesné složení je uvedeno u každého produktu.
+      Výšivka je strojová; celá výroba pochází výhradně z ČR — od tkaní po výšivku.
+    </p>
+    <p>
+      Fotografie na webu odpovídají skutečnému vzhledu výrobků. Drobné odchylky
+      ve výšivce jsou přirozenou součástí kusové výroby.
+    </p>
+
+    <h2>3. Objednávka a uzavření smlouvy</h2>
+    <p>
+      Objednávku podáváte vyplněním formuláře na webu. Po odeslání obdržíte
+      potvrzení na zadaný e-mail. Smlouva je uzavřena okamžikem odeslání
+      potvrzení ze strany prodávající.
+    </p>
+    <p>
+      Pokud objednávku z kapacitních důvodů nelze přijmout, budete kontaktováni
+      do 2 pracovních dní.
+    </p>
+
+    <h2>4. Cena a platba</h2>
+    <p>Ceny jsou uvedeny v Kč včetně DPH (prodávající není plátce DPH).</p>
+    <p>Způsoby platby:</p>
+    <ul>
+      <li><strong>Bankovní převod (QR platba)</strong> — platba předem na základě
+      potvrzovacího e-mailu. Zboží je expedováno po připsání platby na účet.</li>
+      <li><strong>Dobírka</strong> — platba při převzetí zásilky.
+      Cena dobírky odpovídá aktuálnímu ceníku příslušné dopravní služby a je
+      uvedena v objednávkovém formuláři.</li>
+    </ul>
+
+    <h2>5. Dodání</h2>
+    <p>
+      Výroba a expedice proběhne zpravidla do 14 dnů od potvrzení objednávky
+      (resp. od připsání platby u bankovního převodu).
+      V případě většího objemu objednávky vás předem informujeme o termínu.
+    </p>
+    <p>Možnosti doručení a orientační ceny:</p>
+    <ul>
+      <li>Balíkovna — výdejní místo: 75 Kč</li>
+      <li>Balíkovna — domů: 89 Kč</li>
+      <li>PPL — výdejní místo: 79 Kč</li>
+      <li>PPL — domů: 106 Kč</li>
+      <li>Osobní odběr (Struhařov): zdarma — po domluvě</li>
+    </ul>
+    <p>Ceny dopravy se mohou měnit dle aktuálního ceníku dopravců.</p>
+
+    <h2>6. Odstoupení od smlouvy</h2>
+    <p>
+      Jako spotřebitel máte právo odstoupit od smlouvy bez udání důvodu
+      do <strong>14 dnů od převzetí zboží</strong>.
+    </p>
+    <p>
+      Protože je zboží vyráběno na zakázku jako personalizovaný výrobek
+      (konkrétní motiv dle výběru), může být právo na odstoupení omezeno
+      dle § 1837 písm. d) občanského zákoníku. V případě pochybností nás
+      kontaktujte — vždy se snažíme najít přijatelné řešení.
+    </p>
+    <p>
+      Odstoupení oznamte e-mailem na <a href="mailto:ms.zikova@seznam.cz">ms.zikova@seznam.cz</a>.
+      Zboží zašlete zpět na adresu prodávající do 14 dnů od oznámení.
+      Náklady na vrácení nese kupující.
+    </p>
+
+    <h2>7. Reklamace a záruka</h2>
+    <p>
+      Na zboží se vztahuje zákonná záruční lhůta <strong>24 měsíců</strong> od převzetí.
+    </p>
+    <p>
+      Reklamaci uplatněte e-mailem na <a href="mailto:ms.zikova@seznam.cz">ms.zikova@seznam.cz</a>
+      s fotografií a popisem vady. Reklamaci vyřídíme do 30 dnů.
+    </p>
+    <p>
+      Záruka se nevztahuje na opotřebení způsobené běžným užíváním ani na
+      poškození způsobené nesprávnou péčí (viz etiketa výrobku).
+    </p>
+
+    <h2>8. Zpracování osobních údajů</h2>
+    <p>
+      Pro vyřízení objednávky zpracováváme: jméno, e-mailovou adresu, telefon
+      a doručovací adresu. Tyto údaje jsou použity výhradně pro doručení zboží
+      a nebudou předány třetím stranám (s výjimkou předání dopravci v rozsahu
+      nutném pro doručení).
+    </p>
+    <p>
+      Správce osobních údajů: Michaela Zíková, Pod Rybníkem 66, Struhařov 251 64.<br>
+      Máte právo na přístup k údajům, jejich opravu nebo výmaz.
+      Kontaktujte nás na <a href="mailto:ms.zikova@seznam.cz">ms.zikova@seznam.cz</a>.
+    </p>
+
+    <h2>9. Závěrečná ustanovení</h2>
+    <p>
+      Tyto obchodní podmínky se řídí právem České republiky.
+      Případné spory řešíme přednostně dohodou.
+      Spotřebitel má právo na mimosoudní řešení sporu prostřednictvím
+      České obchodní inspekce (coi.cz).
+    </p>
+    <p>
+      Prodávající si vyhrazuje právo podmínky měnit.
+      Na objednávku se vždy vztahují podmínky platné v okamžiku jejího odeslání.
+    </p>
+  </div>
+
+</body>
+</html>

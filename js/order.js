@@ -6,9 +6,9 @@
 
 const MAPY_API_KEY = 'hRzqOVyudWJ2JpIpbNjCnk4WZ1ZL6zzpyZ6xk8QQ380';
 
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-const EMAILJS_CUSTOMER_TEMPLATE = 'YOUR_CUSTOMER_TEMPLATE_ID';
-const EMAILJS_OWNER_TEMPLATE = 'YOUR_OWNER_TEMPLATE_ID';
+const EMAILJS_SERVICE_ID = 'service_mxzi2lg';
+const EMAILJS_CUSTOMER_TEMPLATE = 'template_1meyqyy';
+const EMAILJS_OWNER_TEMPLATE = 'template_68460i9';
 
 let selectedBalikovna = null; // { name, address, id }
 let selectedPplPoint  = null; // { name, address, code }
@@ -51,6 +51,24 @@ function handleBalikovnaMessage(event) {
 
   hideFieldError('balikovna-error');
   closeBalikovnaModal();
+}
+
+// ── PPL widget modal ──────────────────────────────────────────────────────────
+
+function openPplModal() {
+  const modal = document.getElementById('ppl-modal');
+  const overlay = document.getElementById('ppl-overlay');
+  if (modal) modal.classList.remove('ppl-modal--hidden');
+  if (overlay) overlay.classList.add('is-active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePplModal() {
+  const modal = document.getElementById('ppl-modal');
+  const overlay = document.getElementById('ppl-overlay');
+  if (modal) modal.classList.add('ppl-modal--hidden');
+  if (overlay) overlay.classList.remove('is-active');
+  document.body.style.overflow = '';
 }
 
 // ── PPL widget (JS event na document) ────────────────────────────────────────
@@ -203,29 +221,73 @@ function hideFieldError(elId) {
   if (el) el.hidden = true;
 }
 
+function showInputError(el, msg) {
+  clearInputError(el);
+  const err = document.createElement('p');
+  err.className = 'form-error form-error--inline';
+  err.textContent = msg;
+  el.after(err);
+  el.setAttribute('aria-invalid', 'true');
+}
+
+function clearInputError(el) {
+  el.removeAttribute('aria-invalid');
+  const next = el.nextElementSibling;
+  if (next && next.classList.contains('form-error--inline')) next.remove();
+}
+
 function validateForm() {
   let valid = true;
+  let firstInvalid = null;
 
-  const fieldValidations = [
-    { el: document.querySelector('[name="full_name"]'), msg: 'Vyplňte prosím jméno a příjmení.' },
-    { el: document.querySelector('[name="email"]'),     msg: 'Zadejte platnou e-mailovou adresu.' },
-    { el: document.querySelector('[name="phone"]'),     msg: 'Zadejte telefonní číslo (např. +420 123 456 789).' },
-    { el: document.querySelector('[name="delivery"]'),  msg: 'Vyberte způsob doručení.' },
-    { el: document.querySelector('[name="gdpr"]'),      msg: 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.' }
-  ];
+  // Smaž předchozí inline errory
+  document.querySelectorAll('.form-error--inline').forEach(el => el.remove());
+  document.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
 
-  fieldValidations.forEach(({ el, msg }) => {
-    if (!el) return;
-    el.setCustomValidity('');
-    if (!el.checkValidity()) {
-      el.setCustomValidity(msg);
-      el.reportValidity();
-      if (valid) el.focus();
+  // Jméno
+  const nameEl = document.querySelector('[name="full_name"]');
+  if (nameEl && !nameEl.value.trim()) {
+    showInputError(nameEl, 'Vyplňte prosím jméno a příjmení.');
+    if (!firstInvalid) firstInvalid = nameEl;
+    valid = false;
+  }
+
+  // Email — kontrola @ a základní formát
+  const emailEl = document.querySelector('[name="email"]');
+  if (emailEl) {
+    const val = emailEl.value.trim();
+    if (!val || !val.includes('@') || !emailEl.checkValidity()) {
+      showInputError(emailEl, 'Zadejte platnou e-mailovou adresu.');
+      if (!firstInvalid) firstInvalid = emailEl;
       valid = false;
     }
-  });
+  }
 
-  const deliveryVal = document.querySelector('[name="delivery"]')?.value;
+  // Telefon — jen required, žádná validace formátu
+  const phoneEl = document.querySelector('[name="phone"]');
+  if (phoneEl && !phoneEl.value.trim()) {
+    showInputError(phoneEl, 'Vyplňte prosím telefonní číslo.');
+    if (!firstInvalid) firstInvalid = phoneEl;
+    valid = false;
+  }
+
+  // Doručení
+  const deliveryEl = document.querySelector('[name="delivery"]');
+  if (deliveryEl && !deliveryEl.value) {
+    showInputError(deliveryEl, 'Vyberte způsob doručení.');
+    if (!firstInvalid) firstInvalid = deliveryEl;
+    valid = false;
+  }
+
+  // GDPR
+  const gdprEl = document.querySelector('[name="gdpr"]');
+  if (gdprEl && !gdprEl.checked) {
+    showInputError(gdprEl, 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.');
+    if (!firstInvalid) firstInvalid = gdprEl;
+    valid = false;
+  }
+
+  const deliveryVal = deliveryEl?.value;
 
   if (deliveryVal === 'balikovna-vydejna' && !selectedBalikovna) {
     showFieldError('balikovna-error', 'Vyberte prosím pobočku Balíkovny.');
@@ -237,10 +299,10 @@ function validateForm() {
   if (deliveryVal === 'balikovna-domu') {
     const input = document.querySelector('[name="balikovna_address"]');
     if (input && !input.value.trim()) {
-      input.setCustomValidity('Vyplňte doručovací adresu.');
-      input.reportValidity();
+      showInputError(input, 'Vyplňte doručovací adresu.');
+      if (!firstInvalid) firstInvalid = input;
       valid = false;
-    } else if (input) { input.setCustomValidity(''); }
+    }
   }
 
   if (deliveryVal === 'ppl-box' && !selectedPplPoint) {
@@ -253,10 +315,10 @@ function validateForm() {
   if (deliveryVal === 'ppl-domu') {
     const input = document.querySelector('[name="home_address"]');
     if (input && !input.value.trim()) {
-      input.setCustomValidity('Vyplňte doručovací adresu.');
-      input.reportValidity();
+      showInputError(input, 'Vyplňte doručovací adresu.');
+      if (!firstInvalid) firstInvalid = input;
       valid = false;
-    } else if (input) { input.setCustomValidity(''); }
+    }
   }
 
   const cart = loadCart();
@@ -266,6 +328,8 @@ function validateForm() {
   } else {
     hideFieldError('cart-error');
   }
+
+  if (firstInvalid) firstInvalid.focus();
 
   return valid;
 }
@@ -309,7 +373,7 @@ async function handleFormSubmit(e) {
     'balikovna-domu':    'Balíkovna — domů (89 Kč)',
     'ppl-box':           'PPL — výdejní místo (79 Kč)',
     'ppl-domu':          'PPL — domů (106 Kč)',
-    'osobni-odber':      'Osobní odběr (Ostrava)'
+    'osobni-odber':      'Osobní odběr (Struhařov)'
   };
   const deliveryLabel = deliveryLabels[deliveryEl?.value] || deliveryEl?.value || '';
 
@@ -323,16 +387,25 @@ async function handleFormSubmit(e) {
     || document.querySelector('[name="home_address"]')?.value
     || '—';
 
+  const now = new Date();
+  const vs = String(now.getFullYear()).slice(2)
+    + String(now.getMonth() + 1).padStart(2, '0')
+    + String(now.getDate()).padStart(2, '0')
+    + String(Math.floor(Math.random() * 9000) + 1000);
+  const orderNumber = 'MS-' + vs;
+
   const params = {
-    full_name:    document.querySelector('[name="full_name"]')?.value || '',
-    email:        document.querySelector('[name="email"]')?.value || '',
-    phone:        document.querySelector('[name="phone"]')?.value || '',
-    delivery:     deliveryLabel,
-    pickup_point: pickupPoint,
-    home_address: homeAddress,
-    note:         document.querySelector('[name="note"]')?.value || '—',
-    cart_summary: cartSummary,
-    total:        net + ' Kč'
+    full_name:       document.querySelector('[name="full_name"]')?.value || '',
+    email:           document.querySelector('[name="email"]')?.value || '',
+    phone:           document.querySelector('[name="phone"]')?.value || '',
+    delivery:        deliveryLabel,
+    pickup_point:    pickupPoint,
+    home_address:    homeAddress,
+    note:            document.querySelector('[name="note"]')?.value || '—',
+    cart_summary:    cartSummary,
+    total:           net,
+    order_number:    orderNumber,
+    variable_symbol: vs
   };
 
   try {
@@ -368,6 +441,11 @@ function initOrderForm() {
   document.getElementById('balikovna-modal-close')?.addEventListener('click', closeBalikovnaModal);
   document.getElementById('balikovna-overlay')?.addEventListener('click', closeBalikovnaModal);
   window.addEventListener('message', handleBalikovnaMessage);
+
+  // PPL modal
+  document.getElementById('ppl-open-btn')?.addEventListener('click', openPplModal);
+  document.getElementById('ppl-modal-close')?.addEventListener('click', closePplModal);
+  document.getElementById('ppl-overlay')?.addEventListener('click', closePplModal);
 
   // Autocomplete pro adresní pole
   initAddressAutocomplete(document.getElementById('balikovna_address'));
