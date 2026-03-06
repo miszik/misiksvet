@@ -252,12 +252,13 @@ function validateForm() {
     valid = false;
   }
 
-  // Email — kontrola @ a základní formát
+  // Email — striktní regex validace
   const emailEl = document.querySelector('[name="email"]');
   if (emailEl) {
     const val = emailEl.value.trim();
-    if (!val || !val.includes('@') || !emailEl.checkValidity()) {
-      showInputError(emailEl, 'Zadejte platnou e-mailovou adresu.');
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+    if (!val || !emailOk) {
+      showInputError(emailEl, 'Zadejte platnou e-mailovou adresu (např. jan@gmail.com).');
       if (!firstInvalid) firstInvalid = emailEl;
       valid = false;
     }
@@ -279,10 +280,17 @@ function validateForm() {
     valid = false;
   }
 
-  // GDPR
+  // GDPR — chyba jde za celý label (checkbox je uvnitř labelu)
   const gdprEl = document.querySelector('[name="gdpr"]');
   if (gdprEl && !gdprEl.checked) {
-    showInputError(gdprEl, 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.');
+    const gdprGroup = gdprEl.closest('.form-group--checkbox');
+    const existing = gdprGroup?.querySelector('.form-error--inline');
+    if (!existing) {
+      const err = document.createElement('p');
+      err.className = 'form-error form-error--inline';
+      err.textContent = 'Pro odeslání objednávky je nutný souhlas se zpracováním osobních údajů.';
+      gdprGroup ? gdprGroup.after(err) : gdprEl.after(err);
+    }
     if (!firstInvalid) firstInvalid = gdprEl;
     valid = false;
   }
@@ -421,7 +429,11 @@ async function handleFormSubmit(e) {
 
   } catch (err) {
     console.error('EmailJS error:', err);
-    if (errorEl) errorEl.hidden = false;
+    const detail = err?.text || err?.message || JSON.stringify(err);
+    if (errorEl) {
+      errorEl.textContent = 'Něco se nepovedlo: ' + detail + '. Kontaktujte nás na Instagramu.';
+      errorEl.hidden = false;
+    }
     if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Odeslat objednávku'; }
   }
 }
