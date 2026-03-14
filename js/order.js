@@ -371,9 +371,9 @@ async function handleFormSubmit(e) {
 
   // Rate limiting — max 1 odeslani za 5 minut
   const lastSent = parseInt(localStorage.getItem('ms_last_sent') || '0', 10);
-  const now = Date.now();
-  if (now - lastSent < 5 * 60 * 1000) {
-    const waitSec = Math.ceil((5 * 60 * 1000 - (now - lastSent)) / 1000);
+  const nowMs = Date.now();
+  if (nowMs - lastSent < 5 * 60 * 1000) {
+    const waitSec = Math.ceil((5 * 60 * 1000 - (nowMs - lastSent)) / 1000);
     const errorEl = document.getElementById('form-error');
     if (errorEl) {
       errorEl.textContent = 'Počkejte prosím ' + waitSec + ' sekund před dalším odesláním.';
