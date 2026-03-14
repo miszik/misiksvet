@@ -264,12 +264,16 @@ function validateForm() {
     }
   }
 
-  // Telefon — jen required, žádná validace formátu
+  // Telefon — required + formát (min. 9 číslic po odebrání mezer/pomlček/+)
   const phoneEl = document.querySelector('[name="phone"]');
-  if (phoneEl && !phoneEl.value.trim()) {
-    showInputError(phoneEl, 'Vyplňte prosím telefonní číslo.');
-    if (!firstInvalid) firstInvalid = phoneEl;
-    valid = false;
+  if (phoneEl) {
+    const phoneDigits = phoneEl.value.trim().replace(/[\s\-+().]/g, '');
+    const phoneOk = /^\d{9,13}$/.test(phoneDigits);
+    if (!phoneEl.value.trim() || !phoneOk) {
+      showInputError(phoneEl, 'Zadejte platné telefonní číslo (např. 723 456 789 nebo +420 723 456 789).');
+      if (!firstInvalid) firstInvalid = phoneEl;
+      valid = false;
+    }
   }
 
   // Doručení
@@ -439,22 +443,26 @@ async function handleFormSubmit(e) {
 
   try {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OWNER_TEMPLATE, params);
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE, params);
-
-    if (successEl) successEl.hidden = false;
-    if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
-    localStorage.setItem('ms_last_sent', String(Date.now()));
-    clearCart();
-
   } catch (err) {
-    console.error('EmailJS error:', err);
+    console.error('EmailJS owner error:', err);
     const detail = err?.text || err?.message || JSON.stringify(err);
     if (errorEl) {
       errorEl.textContent = 'Něco se nepovedlo: ' + detail + '. Kontaktujte nás na Instagramu.';
       errorEl.hidden = false;
     }
     if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Odeslat objednávku'; }
+    return;
   }
+
+  // Owner email odešel — objednávka přijata, vymaž košík a zobraz úspěch
+  if (successEl) successEl.hidden = false;
+  if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
+  localStorage.setItem('ms_last_sent', String(Date.now()));
+  clearCart();
+
+  // Zákazníkský email — nezávislý, neblokuje úspěch objednávky
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE, params)
+    .catch(err => console.warn('EmailJS customer email failed:', err?.text || err?.message));
 }
 
 // ── Init ─────────────────────────────────────────────────────────────────────
@@ -482,8 +490,13 @@ function initOrderForm() {
 
   const phoneEl = document.querySelector('[name="phone"]');
   if (phoneEl) phoneEl.addEventListener('blur', () => {
-    if (!phoneEl.value.trim()) showInputError(phoneEl, 'Vyplňte prosím telefonní číslo.');
-    else clearInputError(phoneEl);
+    const phoneDigits = phoneEl.value.trim().replace(/[\s\-+().]/g, '');
+    const phoneOk = /^\d{9,13}$/.test(phoneDigits);
+    if (!phoneEl.value.trim() || !phoneOk) {
+      showInputError(phoneEl, 'Zadejte platné telefonní číslo (např. 723 456 789 nebo +420 723 456 789).');
+    } else {
+      clearInputError(phoneEl);
+    }
   });
 
   const deliverySelect = document.querySelector('[name="delivery"]');
