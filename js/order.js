@@ -358,9 +358,8 @@ function formatCartSummary(cart) {
     return product.name + ' x' + item.qty + ' = ' + (product.price * item.qty) + ' Kč';
   }).filter(Boolean);
 
-  const { discount, net } = calcTotal(cart);
+  const { discount } = calcTotal(cart);
   if (discount > 0) lines.push('Sleva akce 3+1: −' + discount + ' Kč');
-  lines.push('CELKEM: ' + net + ' Kč');
   return lines.join('\n');
 }
 
@@ -408,7 +407,16 @@ async function handleFormSubmit(e) {
     'ppl-domu':          'PPL — domů (106 Kč)',
     'osobni-odber':      'Osobní odběr (Struhařov)'
   };
+  const deliveryCosts = {
+    'balikovna-vydejna': 75,
+    'balikovna-domu':    89,
+    'ppl-box':           79,
+    'ppl-domu':          106,
+    'osobni-odber':      0
+  };
   const deliveryLabel = deliveryLabels[deliveryEl?.value] || deliveryEl?.value || '';
+  const shippingCost = deliveryCosts[deliveryEl?.value] ?? 0;
+  const totalWithShipping = net + shippingCost;
 
   const pickupPoint = selectedBalikovna
     ? selectedBalikovna.name + ', ' + selectedBalikovna.address
@@ -436,7 +444,9 @@ async function handleFormSubmit(e) {
     home_address:    homeAddress,
     note:            document.querySelector('[name="note"]')?.value || '—',
     cart_summary:    cartSummary,
-    total:           net,
+    subtotal:        net,
+    shipping_cost:   shippingCost > 0 ? shippingCost + ' Kč' : 'zdarma',
+    total:           totalWithShipping,
     order_number:    orderNumber,
     variable_symbol: vs
   };
