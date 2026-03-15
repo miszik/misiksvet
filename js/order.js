@@ -464,7 +464,8 @@ async function handleFormSubmit(e) {
     return;
   }
 
-  // Owner email odešel — objednávka přijata, vymaž košík a zobraz úspěch
+  // Owner email odešel — objednávka přijata, odečti sklad, vymaž košík a zobraz úspěch
+  await decrementStock(cart);
   if (successEl) successEl.hidden = false;
   if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
   localStorage.setItem('ms_last_sent', String(Date.now()));

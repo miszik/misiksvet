@@ -333,9 +333,14 @@ nav.scrolled {
   margin-bottom: var(--space-xs);
 }
 
-.product-card__avail span {
+.product-card__avail span,
+.product-modal__avail span {
   color: var(--color-brown);
 }
+
+.stock--ok        { color: #7a8c6e; }
+.stock--low       { color: #b87333; font-weight: 600; }
+.stock--unavailable { color: #a09080; font-style: italic; }
 
 .product-card__price {
   font-family: var(--font-heading);

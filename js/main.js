@@ -50,6 +50,13 @@ function openProductModal(productId) {
   modal.querySelector('.product-modal__price').textContent = p.price + '\u00a0Kč';
   modal.querySelector('.btn-modal-add').dataset.id = p.id;
 
+  const modalAvailSpan = modal.querySelector('.product-modal__avail span');
+  if (modalAvailSpan && typeof stockBadge === 'function') {
+    const badge = stockBadge(currentStock, p.type);
+    modalAvailSpan.textContent = badge.text;
+    modalAvailSpan.className = badge.cls;
+  }
+
   const sizeEl = modal.querySelector('.product-modal__size');
   if (p.size) { sizeEl.textContent = 'Rozměr: ' + p.size; sizeEl.hidden = false; }
   else { sizeEl.hidden = true; }
@@ -171,4 +178,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initCart();
   initOrderForm();
+  initStock();
 });
