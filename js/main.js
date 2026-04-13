@@ -30,8 +30,8 @@ function renderProductCards() {
   const gridDoplnky = document.getElementById('product-grid-doplnky');
   if (!gridUterky || !gridDoplnky) return;
 
-  gridUterky.innerHTML  = PRODUCTS.filter(p => p.type === 'uterka').map(productCardHTML).join('');
-  gridDoplnky.innerHTML = PRODUCTS.filter(p => p.type !== 'uterka').map(productCardHTML).join('');
+  gridUterky.innerHTML  = PRODUCTS.filter(p => p.type === 'uterka' && p.visible !== false).map(productCardHTML).join('');
+  gridDoplnky.innerHTML = PRODUCTS.filter(p => p.type !== 'uterka' && p.visible !== false).map(productCardHTML).join('');
 }
 
 function openProductModal(productId) {
