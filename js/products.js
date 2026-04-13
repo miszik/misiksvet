@@ -24,20 +24,6 @@ const PRODUCTS = [
     type: 'uterka'
   },
   {
-    id: 'siska',
-    name: 'Utěrka Šiška s větvičkou',
-    price: 380,
-    image: 'fotky/stare/siska.webp',
-    images: ['fotky/stare/siska.webp', 'fotky/stare/siska-baleni.webp'],
-    description: 'Detailní šiška s jehličím. Ideální dárek pro milovníky přírody.',
-    material: '100% len',
-    size: '40 × 70 cm',
-    properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
-    care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
-    uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
-    type: 'uterka'
-  },
-  {
     id: 'vlci-mak',
     name: 'Utěrka Vlčí mák',
     price: 380,
@@ -110,6 +96,20 @@ const PRODUCTS = [
       'fotky/nove/jirnice-modra_plot_detail.JPG'
     ],
     description: 'Modrá jirnice s jemným listozím. Elegantní motiv české přírody.',
+    material: '100% len',
+    size: '40 × 70 cm',
+    properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
+    care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
+    uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
+    type: 'uterka'
+  },
+  {
+    id: 'siska',
+    name: 'Utěrka Šiška s větvičkou',
+    price: 380,
+    image: 'fotky/stare/siska.webp',
+    images: ['fotky/stare/siska.webp', 'fotky/stare/siska-baleni.webp'],
+    description: 'Detailní šiška s jehličím. Ideální dárek pro milovníky přírody.',
     material: '100% len',
     size: '40 × 70 cm',
     properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
