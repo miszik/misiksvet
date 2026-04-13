@@ -12,6 +12,7 @@ function productCardHTML(p) {
         loading="lazy"
         width="600"
         height="600"
+        ${p.imagePosition ? `style="object-position:${p.imagePosition}"` : ''}
       >
       <div class="product-card__body">
         <h3 class="product-card__name">${p.name}</h3>

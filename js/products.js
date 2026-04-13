@@ -44,26 +44,6 @@ const PRODUCTS = [
     type: 'uterka'
   },
   {
-    id: 'vitod',
-    name: 'Utěrka Vítod',
-    price: 380,
-    image: 'fotky/nove/vitod_detail.JPG',
-    images: [
-      'fotky/nove/vitod_hezka.JPG',
-      'fotky/nove/vitod_balicek.JPG',
-      'fotky/nove/vitod_detail.JPG',
-      'fotky/nove/vitod_plot.JPG',
-      'fotky/nove/vitod_plot_detail.JPG'
-    ],
-    description: 'Luční vítod s drobnými kvítky. Jemný přírodní motiv plný klidu.',
-    material: '100% len',
-    size: '40 × 70 cm',
-    properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
-    care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
-    uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
-    type: 'uterka'
-  },
-  {
     id: 'vlci-bob',
     name: 'Utěrka Vlčí bob',
     price: 380,
@@ -96,6 +76,27 @@ const PRODUCTS = [
       'fotky/nove/jirnice-modra_plot_detail.JPG'
     ],
     description: 'Modrá jirnice s jemným listozím. Elegantní motiv české přírody.',
+    material: '100% len',
+    size: '40 × 70 cm',
+    properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
+    care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
+    uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
+    type: 'uterka'
+  },
+  {
+    id: 'vitod',
+    name: 'Utěrka Vítod',
+    price: 380,
+    image: 'fotky/nove/vitod_detail.JPG',
+    imagePosition: 'center top',
+    images: [
+      'fotky/nove/vitod_hezka.JPG',
+      'fotky/nove/vitod_balicek.JPG',
+      'fotky/nove/vitod_detail.JPG',
+      'fotky/nove/vitod_plot.JPG',
+      'fotky/nove/vitod_plot_detail.JPG'
+    ],
+    description: 'Luční vítod s drobnými kvítky. Jemný přírodní motiv plný klidu.',
     material: '100% len',
     size: '40 × 70 cm',
     properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
