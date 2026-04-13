@@ -24,20 +24,6 @@ const PRODUCTS = [
     type: 'uterka'
   },
   {
-    id: 'vlci-mak',
-    name: 'Utěrka Vlčí mák',
-    price: 380,
-    image: 'fotky/stare/vlci-mak.webp',
-    images: ['fotky/stare/vlci-mak.webp', 'fotky/stare/vlci-mak-baleni.webp'],
-    description: 'Rudý květ vlčího máku s listy. Výrazný a elegantní.',
-    material: '100% len',
-    size: '40 × 70 cm',
-    properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
-    care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
-    uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
-    type: 'uterka'
-  },
-  {
     id: 'siska',
     name: 'Utěrka Šiška s větvičkou',
     price: 380,
@@ -52,8 +38,8 @@ const PRODUCTS = [
     type: 'uterka'
   },
   {
-    id: 'mak',
-    name: 'Utěrka Mák',
+    id: 'vlci-mak',
+    name: 'Utěrka Vlčí mák',
     price: 380,
     image: 'fotky/nove/mak_hezka.JPG',
     images: [
@@ -63,7 +49,7 @@ const PRODUCTS = [
       'fotky/nove/mak_plot.JPG',
       'fotky/nove/mak_plot_detail.JPG'
     ],
-    description: 'Jemný mák v rozkvětu na přírodním lnu. Delikátní motiv plný půvabu.',
+    description: 'Rudý květ vlčího máku na přírodním lnu. Výrazný a elegantní motiv plný léta.',
     material: '100% len',
     size: '40 × 70 cm',
     properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],

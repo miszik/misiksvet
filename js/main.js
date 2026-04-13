@@ -31,7 +31,15 @@ function renderProductCards() {
   if (!gridUterky || !gridDoplnky) return;
 
   gridUterky.innerHTML  = PRODUCTS.filter(p => p.type === 'uterka' && p.visible !== false).map(productCardHTML).join('');
-  gridDoplnky.innerHTML = PRODUCTS.filter(p => p.type !== 'uterka' && p.visible !== false).map(productCardHTML).join('');
+  gridDoplnky.innerHTML = PRODUCTS.filter(p => p.type !== 'uterka' && p.visible !== false).map(productCardHTML).join('') + `
+    <article class="product-card product-card--coming-soon" aria-label="Připravujeme další výrobky">
+      <div class="coming-soon-card__inner">
+        <p class="coming-soon-card__title">Připravujeme pro vás</p>
+        <p class="coming-soon-card__text">Máte se na co těšit</p>
+        <span class="coming-soon-card__dots">· · ·</span>
+      </div>
+    </article>
+  `;
 }
 
 function openProductModal(productId) {
