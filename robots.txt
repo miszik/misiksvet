@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /js/
+Disallow: /css/
+Disallow: /obrazky/
+
+Sitemap: https://misiksvet.cz/sitemap.xml

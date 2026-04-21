@@ -88,7 +88,7 @@ const PRODUCTS = [
     name: 'Utěrka Vítod',
     price: 380,
     image: 'fotky/nove/vitod_detail.JPG',
-    imagePosition: 'center top',
+    imagePosition: 'center 30%',
     images: [
       'fotky/nove/vitod_hezka.JPG',
       'fotky/nove/vitod_balicek.JPG',
