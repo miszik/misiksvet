@@ -362,8 +362,15 @@
       <textarea id="m-props" rows="3" placeholder="Vysoce savá&#10;Rychle schne"></textarea>
       <label class="m-lbl">Péče (každá na novém řádku)</label>
       <textarea id="m-care" rows="2" placeholder="Prát na 40 °C&#10;Nebělit"></textarea>
-      <label class="m-lbl">Hlavní foto (cesta)</label><input id="m-img" placeholder="fotky/nove/hermanek_hezka.JPG">
-      <label class="m-lbl">Všechny fotky (každá na novém řádku)</label>
+      <label class="m-lbl">Hlavní foto (cesta)</label>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <input id="m-img" placeholder="fotky/nove/hermanek_hezka.JPG" style="flex:1">
+        <label class="btn btn-e" style="cursor:pointer;white-space:nowrap;padding:6px 10px;">📷 Nahrát<input type="file" accept="image/*" style="display:none" onchange="uploadMainPhoto(this)"></label>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:12px 0 4px;">
+        <label class="m-lbl" style="margin:0;">Všechny fotky (každá na novém řádku)</label>
+        <label class="btn btn-e" style="cursor:pointer;font-size:11px;padding:4px 9px;">+ Přidat fotky<input type="file" accept="image/*" multiple style="display:none" onchange="uploadGalleryPhotos(this)"></label>
+      </div>
       <textarea id="m-imgs" rows="3" placeholder="fotky/nove/hermanek_hezka.JPG&#10;fotky/nove/hermanek_detail.JPG"></textarea>
       <div style="margin-top:12px;display:flex;align-items:center;gap:7px;">
         <input type="checkbox" id="m-vis" checked style="width:auto">
@@ -747,6 +754,51 @@ function eObecny(jmeno,text) { return eWrap(`
   <p style="margin:0 0 18px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
   <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">${text.replace(/\n/g,'<br>')||'<em style="color:#a09080">Text se zobrazí zde...</em>'}</p>
 </td></tr>`); }
+
+// ══ PHOTO UPLOAD ══
+async function uploadPhoto(file) {
+  const path = 'fotky/nove/' + file.name;
+  toast('Nahrávám ' + file.name + '…');
+  const b64 = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  let sha;
+  try {
+    const chk = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+    if (chk.ok) { const d = await chk.json(); sha = d.sha; }
+  } catch {}
+  const body = { message: 'Admin: nahrání fotky ' + file.name, content: b64, branch: GH_BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+    method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body)
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.message || 'GitHub error');
+  shas[path] = d.content.sha;
+  toast(file.name + ' nahráno!', 'ok');
+  return path;
+}
+
+async function uploadMainPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  try { document.getElementById('m-img').value = await uploadPhoto(file); }
+  catch(e) { toast('Chyba: ' + e.message, 'err'); }
+  input.value = '';
+}
+
+async function uploadGalleryPhotos(input) {
+  const paths = [];
+  for (const file of input.files) {
+    try { paths.push(await uploadPhoto(file)); } catch(e) { toast('Chyba: ' + e.message, 'err'); }
+  }
+  if (!paths.length) return;
+  const ta = document.getElementById('m-imgs');
+  ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + paths.join('\n');
+  input.value = '';
+}
 
 // ══ FIREBASE STOCK ══
 const FB_URL = 'https://misiksvet-e77ea-default-rtdb.europe-west1.firebasedatabase.app';
