@@ -189,6 +189,7 @@
     <nav>
       <button class="active" data-t="produkty"  onclick="go('produkty')"> <span>🧵</span>Produkty</button>
       <button             data-t="doprava"   onclick="go('doprava')">  <span>📦</span>Doprava</button>
+      <button             data-t="sklad"     onclick="go('sklad')">   <span>📊</span>Sklad</button>
       <button             data-t="emaily"    onclick="go('emaily')">   <span>✉️</span>Stavové emaily</button>
       <button             data-t="obecny"    onclick="go('obecny')">   <span>📝</span>Obecný email</button>
       <button             data-t="claude"    onclick="go('claude')">   <span>🤖</span>Claude AI</button>
@@ -217,6 +218,17 @@
       <div class="tab-title">Ceny dopravy</div>
       <div id="sh-editor" style="background:var(--cream);border-radius:6px;padding:18px;border:1px solid var(--border);max-width:480px;"></div>
       <p style="margin-top:14px;font-size:12px;color:var(--muted);">Osobní odběr je vždy zdarma. Ceny dobírky nastavuje dopravce.</p>
+    </div>
+
+    <!-- SKLAD -->
+    <div id="tab-sklad" class="tab">
+      <div class="tab-title">Zásoby na skladě</div>
+      <div id="stock-editor" style="background:var(--cream);border-radius:6px;padding:18px;border:1px solid var(--border);max-width:480px;">
+        <p style="color:var(--muted);font-size:13px;">Načítám...</p>
+      </div>
+      <p style="margin-top:14px;font-size:12px;color:var(--muted);">Při 0 kusech se na webu zobrazí "Na objednání — delší dodací lhůta".</p>
+      <button class="btn-add" style="margin-top:16px;" onclick="saveStock()">Uložit zásoby</button>
+      <div id="stock-status" style="margin-top:8px;font-size:12px;min-height:16px;"></div>
     </div>
 
     <!-- STAVOVÉ EMAILY -->
@@ -425,7 +437,7 @@ async function startApp() {
   document.getElementById('app').classList.add('on');
   toast('Načítám data z GitHubu…');
   try {
-    await Promise.all([loadProducts(), loadShipping()]);
+    await Promise.all([loadProducts(), loadShipping(), loadStock()]);
     renderProds(); renderShipping(); eprev(); gprev();
     toast('Načteno!', 'ok');
   } catch(e) {
@@ -736,6 +748,59 @@ function eObecny(jmeno,text) { return eWrap(`
   <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">${text.replace(/\n/g,'<br>')||'<em style="color:#a09080">Text se zobrazí zde...</em>'}</p>
 </td></tr>`); }
 
+// ══ FIREBASE STOCK ══
+const FB_URL = 'https://misiksvet-e77ea-default-rtdb.europe-west1.firebasedatabase.app';
+let stockData = { uterky: 0, zastery: 0 };
+
+async function loadStock() {
+  const res = await fetch(FB_URL + '/.json');
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  stockData = {
+    uterky:  typeof data?.uterky  === 'number' ? data.uterky  : 0,
+    zastery: typeof data?.zastery === 'number' ? data.zastery : 0
+  };
+  renderStock();
+}
+
+function renderStock() {
+  document.getElementById('stock-editor').innerHTML =
+    `<div class="sh-row"><span class="sh-name">Utěrky</span>
+      <input type="number" class="sh-in" id="st-uterky" value="${stockData.uterky}" min="0">
+      <span class="sh-cur">ks</span></div>
+    <div class="sh-row"><span class="sh-name">Zástěry</span>
+      <input type="number" class="sh-in" id="st-zastery" value="${stockData.zastery}" min="0">
+      <span class="sh-cur">ks</span></div>`;
+}
+
+async function fbSaveStock(uterky, zastery) {
+  const res = await fetch(FB_URL + '/.json', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ uterky, zastery })
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  stockData = { uterky, zastery };
+  const u = document.getElementById('st-uterky'), z = document.getElementById('st-zastery');
+  if (u) u.value = uterky;
+  if (z) z.value = zastery;
+}
+
+async function saveStock() {
+  const uterky  = parseInt(document.getElementById('st-uterky').value)  || 0;
+  const zastery = parseInt(document.getElementById('st-zastery').value) || 0;
+  const st = document.getElementById('stock-status');
+  st.textContent = 'Ukládám...'; st.style.color = 'var(--muted)';
+  try {
+    await fbSaveStock(uterky, zastery);
+    st.textContent = '';
+    toast('Zásoby uloženy!', 'ok');
+  } catch(e) {
+    st.textContent = 'Chyba: ' + e.message; st.style.color = 'var(--red)';
+    toast('Chyba ukládání zásob', 'err');
+  }
+}
+
 // ══ CLAUDE AI ══
 function clSaveKey() {
   const k = document.getElementById('cl-key').value.trim();
@@ -755,7 +820,9 @@ const CL_TOOLS = [
   { name:'delete_product', description:'Smaže produkt.', input_schema:{type:'object',required:['id'],properties:{id:{type:'string'}}} },
   { name:'get_shipping', description:'Vrátí aktuální ceny dopravy.', input_schema:{type:'object',properties:{}} },
   { name:'set_shipping_price', description:'Nastaví cenu dopravy.', input_schema:{type:'object',required:['key','price'],properties:{key:{type:'string'},price:{type:'number'}}} },
-  { name:'save_changes', description:'Uloží změny do GitHubu.', input_schema:{type:'object',properties:{}} }
+  { name:'save_changes', description:'Uloží změny do GitHubu.', input_schema:{type:'object',properties:{}} },
+  { name:'get_stock', description:'Vrátí aktuální počet kusů na skladě (utěrky, zástěry).', input_schema:{type:'object',properties:{}} },
+  { name:'set_stock', description:'Nastaví počet kusů na skladě.', input_schema:{type:'object',properties:{uterky:{type:'number',description:'Počet utěrek'},zastery:{type:'number',description:'Počet zástěr'}}} }
 ];
 
 function clExec(name, inp) {
@@ -790,6 +857,15 @@ function clExec(name, inp) {
       return `Cena "${inp.key}" → ${inp.price} Kč.`;
     }
     case 'save_changes': saveAll(); return 'Ukládám...';
+    case 'get_stock': return JSON.stringify(stockData);
+    case 'set_stock': {
+      if (inp.uterky  !== undefined) stockData.uterky  = inp.uterky;
+      if (inp.zastery !== undefined) stockData.zastery = inp.zastery;
+      fbSaveStock(stockData.uterky, stockData.zastery)
+        .then(()=>toast('Zásoby uloženy!','ok'))
+        .catch(e=>toast('Chyba zásob: '+e.message,'err'));
+      return `Sklad nastaven: utěrky=${stockData.uterky}, zástěry=${stockData.zastery}. Ukládám...`;
+    }
     default: return `Neznámý nástroj: ${name}`;
   }
 }
