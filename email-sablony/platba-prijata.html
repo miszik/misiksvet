@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="background:#fffdf9;border-radius:6px;overflow:hidden;max-width:560px;width:100%;">
+
+          <!-- Hlavička -->
+          <tr>
+            <td style="background:#8b6f47;padding:28px 32px;text-align:center;">
+              <p style="margin:0;color:#fffdf9;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;">Mišik svět</p>
+              <p style="margin:6px 0 0;color:#e8d9c8;font-size:12px;letter-spacing:1px;font-family:Arial,sans-serif;">VÝŠIVKY NA PŘÍRODNÍCH TKANINÁCH</p>
+            </td>
+          </tr>
+
+          <!-- Tělo -->
+          <tr>
+            <td style="padding:32px 32px 24px;">
+              <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. {{order_number}}</p>
+              <p style="margin:0 0 20px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>{{full_name}}</strong>,</p>
+              <p style="margin:0 0 16px;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše platba <strong>{{total}} Kč</strong> byla přijata — děkujeme!</p>
+              <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše objednávka nyní putuje do výroby. Ušijeme ji s láskou a dáme Vám vědět, jakmile bude na cestě k Vám.</p>
+            </td>
+          </tr>
+
+          <!-- Status -->
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #7a8c6e;">
+                <tr>
+                  <td>
+                    <p style="margin:0 0 12px;color:#7a8c6e;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Stav objednávky</p>
+                    <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Objednávka přijata</p>
+                    <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Platba přijata</p>
+                    <p style="margin:0 0 6px;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Ve výrobě</p>
+                    <p style="margin:0;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Odesláno</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Patička -->
+          <tr>
+            <td style="background:#f5f0eb;padding:20px 32px;text-align:center;border-top:1px solid #e0d4c4;">
+              <p style="margin:0 0 4px;color:#8b6f47;font-size:14px;font-family:Georgia,serif;">Míša — Mišik svět</p>
+              <p style="margin:0;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">
+                <a href="mailto:ms.zikova@seznam.cz" style="color:#a09080;text-decoration:none;">ms.zikova@seznam.cz</a>
+                &nbsp;·&nbsp;
+                <a href="https://misiksvet.cz" style="color:#a09080;text-decoration:none;">misiksvet.cz</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

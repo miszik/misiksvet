@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mišik svět — Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brown:#8b6f47; --brown-dark:#7a6040; --beige:#f5f0eb;
+      --beige-mid:#ede5da; --cream:#fffdf9; --green:#7a8c6e;
+      --green-dark:#697a5e; --text:#3a2e24; --muted:#a09080;
+      --border:#d4c4b0; --red:#c0392b; --red-light:#f5e8e8;
+      --ok:#e8f0e4; --ok-text:#4a6a3a;
+    }
+    html,body { height:100%; font-family:Arial,sans-serif; background:var(--beige); color:var(--text); font-size:14px; }
+
+    /* ── GATE (heslo + token) ── */
+    .gate { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; }
+    .gate-card { background:var(--cream); border-radius:10px; padding:44px 36px; max-width:400px; width:100%; }
+    .gate-logo { font-family:Georgia,serif; font-size:22px; color:var(--brown); letter-spacing:2px; text-align:center; margin-bottom:4px; }
+    .gate-sub { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; text-align:center; margin-bottom:28px; }
+    .gate-card h3 { font-size:15px; color:var(--text); margin-bottom:16px; }
+    .gate-card p { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px; }
+    .gate-card a { color:var(--brown); }
+    .field-lbl { display:block; font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--brown); margin:14px 0 5px; }
+    .gate-card input { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:4px; font-size:14px; color:var(--text); background:var(--cream); outline:none; }
+    .gate-card input:focus { border-color:var(--brown); }
+    .btn-gate { display:block; width:100%; margin-top:20px; padding:13px; background:var(--brown); color:var(--cream); border:none; border-radius:4px; font-size:15px; font-family:Georgia,serif; letter-spacing:1px; cursor:pointer; }
+    .btn-gate:hover { background:var(--brown-dark); }
+    .gate-err { margin-top:12px; color:var(--red); font-size:13px; min-height:18px; }
+    .info-box { background:var(--beige); border-radius:6px; padding:12px 14px; font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:16px; border-left:3px solid var(--brown); }
+    .info-box code { background:var(--beige-mid); padding:1px 5px; border-radius:3px; font-size:11px; color:var(--text); }
+
+    /* ── APP ── */
+    #app { display:none; height:100vh; }
+    #app.on { display:flex; }
+    .sidebar { width:200px; flex-shrink:0; background:var(--cream); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+    .sb-logo { padding:18px 16px 12px; border-bottom:1px solid var(--border); }
+    .sb-logo h2 { font-family:Georgia,serif; font-size:15px; color:var(--brown); letter-spacing:1.5px; }
+    .sb-logo small { font-size:10px; color:var(--muted); letter-spacing:.5px; text-transform:uppercase; }
+    nav { flex:1; padding:8px 0; overflow-y:auto; }
+    nav button { display:flex; align-items:center; gap:9px; width:100%; padding:9px 16px; background:none; border:none; border-left:3px solid transparent; font-size:13px; color:var(--muted); cursor:pointer; text-align:left; transition:all .15s; }
+    nav button:hover { background:var(--beige); color:var(--text); }
+    nav button.active { background:var(--beige); color:var(--brown); border-left-color:var(--brown); font-weight:bold; }
+    .sb-bottom { padding:12px; border-top:1px solid var(--border); }
+    #save-status { font-size:11px; color:var(--muted); text-align:center; margin-bottom:8px; min-height:16px; }
+    #btn-save { width:100%; padding:9px; background:var(--green); color:#fff; border:none; border-radius:4px; font-size:13px; cursor:pointer; }
+    #btn-save:hover { background:var(--green-dark); }
+    #btn-save:disabled { background:var(--border); cursor:default; }
+    main { flex:1; overflow-y:auto; }
+    .tab { display:none; padding:28px 32px; max-width:880px; }
+    .tab.on { display:block; }
+    .tab-title { font-family:Georgia,serif; font-size:20px; color:var(--brown); margin-bottom:20px; letter-spacing:1px; }
+
+    /* ── TABLE ── */
+    table { width:100%; border-collapse:collapse; background:var(--cream); border-radius:6px; overflow:hidden; }
+    th { background:var(--beige-mid); font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); padding:9px 12px; text-align:left; }
+    td { padding:9px 12px; border-top:1px solid var(--border); vertical-align:middle; }
+    tr:hover td { background:var(--beige); }
+    .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; }
+    .b-green { background:var(--ok); color:var(--ok-text); }
+    .b-grey  { background:#eee; color:var(--muted); }
+    .thumb { width:38px; height:38px; object-fit:cover; border-radius:3px; border:1px solid var(--border); }
+    .no-thumb { width:38px; height:38px; background:var(--beige-mid); border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+
+    /* ── BUTTONS ── */
+    .btn { padding:5px 11px; border-radius:4px; border:none; cursor:pointer; font-size:12px; }
+    .btn-e { background:var(--beige-mid); color:var(--text); }
+    .btn-e:hover { background:var(--border); }
+    .btn-d { background:var(--red-light); color:var(--red); }
+    .btn-d:hover { background:#f0d0d0; }
+    .btn-add { padding:9px 18px; background:var(--brown); color:var(--cream); border:none; border-radius:4px; font-size:13px; cursor:pointer; margin-bottom:14px; }
+    .btn-add:hover { background:var(--brown-dark); }
+    .tog-on  { background:var(--ok); color:var(--ok-text); border:none; border-radius:10px; padding:3px 10px; font-size:11px; cursor:pointer; }
+    .tog-off { background:#eee; color:var(--muted); border:none; border-radius:10px; padding:3px 10px; font-size:11px; cursor:pointer; }
+
+    /* ── MODAL ── */
+    #mbg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:100; align-items:flex-start; justify-content:center; padding:32px 16px; overflow-y:auto; }
+    #mbg.on { display:flex; }
+    #modal { background:var(--cream); border-radius:8px; width:100%; max-width:540px; }
+    .m-head { padding:18px 22px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .m-head h3 { font-family:Georgia,serif; color:var(--brown); }
+    .m-head button { background:none; border:none; font-size:20px; cursor:pointer; color:var(--muted); line-height:1; }
+    .m-body { padding:18px 22px; }
+    .m-foot { padding:12px 22px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; }
+    .m-lbl { display:block; font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--brown); margin:12px 0 4px; }
+    .m-body input, .m-body textarea, .m-body select { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:4px; font-size:13px; color:var(--text); background:var(--cream); outline:none; font-family:inherit; }
+    .m-body input:focus, .m-body textarea:focus { border-color:var(--brown); }
+    .m-body textarea { resize:vertical; min-height:65px; }
+    .f2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .m-hint { font-size:11px; color:var(--muted); margin-top:3px; }
+    .btn-mc { background:var(--beige-mid); color:var(--text); border:none; padding:8px 16px; border-radius:4px; cursor:pointer; }
+    .btn-ms { background:var(--brown); color:var(--cream); border:none; padding:8px 16px; border-radius:4px; cursor:pointer; }
+    .btn-ms:hover { background:var(--brown-dark); }
+
+    /* ── SHIPPING ── */
+    .sh-row { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+    .sh-name { flex:1; }
+    .sh-in { width:76px; padding:6px 10px; border:1px solid var(--border); border-radius:4px; font-size:14px; text-align:right; }
+    .sh-cur { color:var(--muted); font-size:13px; }
+
+    /* ── EMAILS ── */
+    .email-tabs { display:flex; gap:8px; margin-bottom:18px; }
+    .etab { padding:7px 16px; border:2px solid var(--border); border-radius:20px; background:var(--cream); cursor:pointer; font-size:13px; color:var(--muted); }
+    .etab.on { border-color:var(--brown); color:var(--brown); background:var(--beige); }
+    .e-form { background:var(--cream); border-radius:6px; padding:18px; border:1px solid var(--border); margin-bottom:14px; }
+    .e-form label { display:block; font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--brown); margin:12px 0 4px; }
+    .e-form input, .e-form select { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:4px; font-size:13px; color:var(--text); background:var(--cream); outline:none; }
+    .e-form input:focus { border-color:var(--brown); }
+    .prev-box { border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+    .prev-bar { background:var(--beige-mid); padding:7px 14px; font-size:11px; color:var(--muted); letter-spacing:.5px; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; }
+    iframe.eprev { display:block; width:100%; border:none; height:500px; }
+    .btn-copy { padding:7px 14px; background:var(--green); color:#fff; border:none; border-radius:4px; font-size:12px; cursor:pointer; }
+
+    /* ── CLAUDE ── */
+    #tab-claude { max-width:100%; height:100vh; display:none; flex-direction:column; padding:0; }
+    #tab-claude.on { display:flex; }
+    .cl-top { padding:18px 26px 14px; border-bottom:1px solid var(--border); background:var(--cream); }
+    .cl-top h2 { font-family:Georgia,serif; color:var(--brown); font-size:17px; margin-bottom:8px; }
+    .cl-key-row { display:flex; gap:8px; }
+    .cl-key-row input { flex:1; font-size:13px; padding:8px 10px; border:1px solid var(--border); border-radius:4px; background:var(--cream); outline:none; }
+    .cl-key-row input:focus { border-color:var(--brown); }
+    #chat-msgs { flex:1; overflow-y:auto; padding:18px 26px; display:flex; flex-direction:column; gap:12px; }
+    .cm-u { align-self:flex-end; background:var(--brown); color:var(--cream); padding:9px 13px; border-radius:10px 10px 2px 10px; max-width:70%; font-size:13px; line-height:1.5; }
+    .cm-a { align-self:flex-start; background:var(--cream); border:1px solid var(--border); padding:9px 13px; border-radius:10px 10px 10px 2px; max-width:80%; font-size:13px; line-height:1.6; white-space:pre-wrap; }
+    .cm-t { align-self:flex-start; background:var(--ok); border:1px solid #c0dab8; padding:7px 11px; border-radius:6px; max-width:80%; font-size:12px; color:var(--ok-text); font-family:monospace; }
+    .cm-err { align-self:flex-start; background:var(--red-light); padding:7px 11px; border-radius:6px; font-size:12px; color:var(--red); }
+    .cl-in-row { padding:12px 26px; border-top:1px solid var(--border); background:var(--cream); display:flex; gap:8px; }
+    .cl-in-row textarea { flex:1; resize:none; height:42px; padding:9px 11px; font-size:13px; line-height:1.4; border:1px solid var(--border); border-radius:6px; outline:none; font-family:inherit; }
+    .cl-in-row textarea:focus { border-color:var(--brown); }
+    .btn-send { padding:9px 18px; background:var(--brown); color:var(--cream); border:none; border-radius:6px; cursor:pointer; font-size:13px; }
+    .btn-send:disabled { background:var(--border); }
+
+    /* ── TOAST ── */
+    #toast { position:fixed; bottom:22px; right:22px; padding:9px 16px; border-radius:6px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .3s; z-index:999; background:var(--text); color:var(--cream); }
+    #toast.on { opacity:1; }
+    #toast.ok { background:var(--green); }
+    #toast.err { background:var(--red); }
+
+    /* ── SETTINGS TAB ── */
+    .settings-section { background:var(--cream); border:1px solid var(--border); border-radius:6px; padding:18px; margin-bottom:16px; max-width:500px; }
+    .settings-section h4 { font-size:13px; color:var(--brown); margin-bottom:12px; letter-spacing:.5px; text-transform:uppercase; }
+    .settings-section input { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:4px; font-size:13px; margin-bottom:8px; outline:none; font-family:inherit; }
+    .settings-section input:focus { border-color:var(--brown); }
+    .btn-settings { padding:8px 14px; background:var(--brown); color:var(--cream); border:none; border-radius:4px; font-size:12px; cursor:pointer; }
+    .btn-settings:hover { background:var(--brown-dark); }
+    .btn-danger { background:var(--red-light); color:var(--red); border:none; padding:8px 14px; border-radius:4px; font-size:12px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<!-- ══ HESLO ══ -->
+<div class="gate" id="screen-pass">
+  <div class="gate-card">
+    <div class="gate-logo">Mišik svět</div>
+    <div class="gate-sub">Admin panel</div>
+    <label class="field-lbl">Heslo</label>
+    <input type="password" id="pass-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPass()">
+    <button class="btn-gate" onclick="checkPass()">Vstoupit</button>
+    <div class="gate-err" id="pass-err"></div>
+  </div>
+</div>
+
+<!-- ══ GITHUB TOKEN SETUP ══ -->
+<div class="gate" id="screen-token" style="display:none">
+  <div class="gate-card">
+    <div class="gate-logo">Mišik svět</div>
+    <div class="gate-sub">Nastavení GitHub přístupu</div>
+    <div class="info-box">
+      Potřebuji <strong>Personal Access Token</strong> abych mohl ukládat změny přímo do GitHubu.<br><br>
+      1. Jdi na <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+      2. Note: <code>misiksvet-admin</code><br>
+      3. Expiration: <code>No expiration</code><br>
+      4. Zaškrtni: <code>repo</code> (celá sekce)<br>
+      5. Klikni <em>Generate token</em> a zkopíruj ho sem
+    </div>
+    <label class="field-lbl">GitHub Personal Access Token</label>
+    <input type="password" id="token-input" placeholder="ghp_..." onkeydown="if(event.key==='Enter')saveToken()">
+    <button class="btn-gate" onclick="saveToken()">Uložit a pokračovat</button>
+    <div class="gate-err" id="token-err"></div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sb-logo"><h2>Mišik svět</h2><small>Admin</small></div>
+    <nav>
+      <button class="active" data-t="produkty"  onclick="go('produkty')"> <span>🧵</span>Produkty</button>
+      <button             data-t="doprava"   onclick="go('doprava')">  <span>📦</span>Doprava</button>
+      <button             data-t="emaily"    onclick="go('emaily')">   <span>✉️</span>Stavové emaily</button>
+      <button             data-t="obecny"    onclick="go('obecny')">   <span>📝</span>Obecný email</button>
+      <button             data-t="claude"    onclick="go('claude')">   <span>🤖</span>Claude AI</button>
+      <button             data-t="nastaveni" onclick="go('nastaveni')"><span>⚙️</span>Nastavení</button>
+    </nav>
+    <div class="sb-bottom">
+      <div id="save-status"></div>
+      <button id="btn-save" onclick="saveAll()" disabled>Uložit změny</button>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- PRODUKTY -->
+    <div id="tab-produkty" class="tab on">
+      <div class="tab-title">Produkty</div>
+      <button class="btn-add" onclick="openAdd()">+ Přidat produkt</button>
+      <table><thead><tr>
+        <th style="width:46px">Foto</th><th>Název</th><th>Cena</th>
+        <th>Typ</th><th>Viditelný</th><th style="width:110px">Akce</th>
+      </tr></thead><tbody id="prod-body"></tbody></table>
+    </div>
+
+    <!-- DOPRAVA -->
+    <div id="tab-doprava" class="tab">
+      <div class="tab-title">Ceny dopravy</div>
+      <div id="sh-editor" style="background:var(--cream);border-radius:6px;padding:18px;border:1px solid var(--border);max-width:480px;"></div>
+      <p style="margin-top:14px;font-size:12px;color:var(--muted);">Osobní odběr je vždy zdarma. Ceny dobírky nastavuje dopravce.</p>
+    </div>
+
+    <!-- STAVOVÉ EMAILY -->
+    <div id="tab-emaily" class="tab">
+      <div class="tab-title">Stavové emaily</div>
+      <div class="email-tabs">
+        <button class="etab on" onclick="etab('platba',this)">Platba přijata</button>
+        <button class="etab"    onclick="etab('expedice',this)">Expedice</button>
+      </div>
+
+      <div id="ep-platba">
+        <div class="e-form">
+          <div class="f2">
+            <div><label>Email zákazníka</label><input id="e1m" type="email" placeholder="jana@email.cz" oninput="eprev()"></div>
+            <div><label>Jméno</label><input id="e1j" type="text" placeholder="Jana Nováková" oninput="eprev()"></div>
+          </div>
+          <div class="f2" style="margin-top:10px">
+            <div><label>Číslo objednávky</label><input id="e1c" placeholder="MS-2025-001" oninput="eprev()"></div>
+            <div><label>Částka (Kč)</label><input id="e1k" placeholder="750" oninput="eprev()"></div>
+          </div>
+        </div>
+        <div class="prev-box">
+          <div class="prev-bar"><span>Náhled</span><button class="btn-copy" onclick="copyE('platba')">Kopírovat</button></div>
+          <iframe class="eprev" id="fr-platba"></iframe>
+        </div>
+      </div>
+
+      <div id="ep-expedice" style="display:none">
+        <div class="e-form">
+          <div class="f2">
+            <div><label>Email zákazníka</label><input id="e2m" type="email" placeholder="jana@email.cz" oninput="eprev()"></div>
+            <div><label>Jméno</label><input id="e2j" type="text" placeholder="Jana Nováková" oninput="eprev()"></div>
+          </div>
+          <div class="f2" style="margin-top:10px">
+            <div><label>Číslo objednávky</label><input id="e2c" placeholder="MS-2025-001" oninput="eprev()"></div>
+            <div><label>Doprava</label>
+              <select id="e2d" onchange="eprev()">
+                <option>Zásilkovna</option><option>PPL</option>
+                <option>Česká pošta</option><option>Osobní odběr (Struhařov)</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:10px"><label>Číslo zásilky</label><input id="e2z" placeholder="Z1234567890 (prázdné = bez čísla)" oninput="eprev()"></div>
+        </div>
+        <div class="prev-box">
+          <div class="prev-bar"><span>Náhled</span><button class="btn-copy" onclick="copyE('expedice')">Kopírovat</button></div>
+          <iframe class="eprev" id="fr-expedice"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBECNÝ EMAIL -->
+    <div id="tab-obecny" class="tab">
+      <div class="tab-title">Obecný email</div>
+      <div class="e-form">
+        <div class="f2">
+          <div><label>Email zákazníka</label><input id="gm" type="email" placeholder="jana@email.cz"></div>
+          <div><label>Jméno</label><input id="gj" placeholder="Jana Nováková" oninput="gprev()"></div>
+        </div>
+        <div style="margin-top:10px"><label>Text zprávy</label>
+          <textarea id="gt" rows="5" placeholder="Dobrý den, chtěla jsem Vám napsat..." oninput="gprev()"></textarea>
+        </div>
+      </div>
+      <div class="prev-box">
+        <div class="prev-bar"><span>Náhled</span><button class="btn-copy" onclick="copyE('obecny')">Kopírovat</button></div>
+        <iframe class="eprev" id="fr-obecny"></iframe>
+      </div>
+    </div>
+
+    <!-- CLAUDE AI -->
+    <div id="tab-claude" class="tab">
+      <div class="cl-top">
+        <h2>Claude AI asistent</h2>
+        <div class="cl-key-row">
+          <input type="password" id="cl-key" placeholder="sk-ant-api03-...">
+          <button class="btn btn-e" onclick="clSaveKey()">Uložit klíč</button>
+          <button class="btn btn-d" onclick="clClearKey()">Smazat</button>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:5px;">Anthropic API klíč — získáš na <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
+      </div>
+      <div id="chat-msgs"></div>
+      <div class="cl-in-row">
+        <textarea id="cl-in" placeholder="Např. 'Přidej produkt Máslíček za 420 Kč' nebo 'Změň cenu Zásilkovny na 85 Kč'" onkeydown="clKey(event)"></textarea>
+        <button class="btn-send" id="cl-send" onclick="clSend()">Odeslat</button>
+      </div>
+    </div>
+
+    <!-- NASTAVENÍ -->
+    <div id="tab-nastaveni" class="tab">
+      <div class="tab-title">Nastavení</div>
+      <div class="settings-section">
+        <h4>GitHub token</h4>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Token pro ukládání změn do GitHubu. Potřebuješ scope <code>repo</code>.</p>
+        <input type="password" id="new-token" placeholder="ghp_...">
+        <button class="btn-settings" onclick="updateToken()">Aktualizovat token</button>
+      </div>
+      <div class="settings-section">
+        <h4>Heslo k admin panelu</h4>
+        <input type="password" id="new-pass" placeholder="Nové heslo">
+        <input type="password" id="new-pass2" placeholder="Zopakuj heslo" style="margin-top:8px">
+        <button class="btn-settings" onclick="changePass()" style="margin-top:4px">Změnit heslo</button>
+      </div>
+      <div class="settings-section">
+        <h4>Odhlásit / resetovat</h4>
+        <button class="btn-danger" onclick="logout()">Odhlásit se</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="mbg">
+  <div id="modal">
+    <div class="m-head"><h3 id="m-title">Produkt</h3><button onclick="mClose()">×</button></div>
+    <div class="m-body">
+      <input type="hidden" id="m-oid">
+      <div class="f2">
+        <div><label class="m-lbl">ID *</label><input id="m-id" placeholder="muj-produkt"><div class="m-hint">Malá písmena, bez mezer</div></div>
+        <div><label class="m-lbl">Typ *</label><select id="m-typ"><option value="uterka">Utěrka</option><option value="zastera">Zástěra</option></select></div>
+      </div>
+      <label class="m-lbl">Název *</label><input id="m-name" placeholder="Utěrka Heřmánek">
+      <div class="f2">
+        <div><label class="m-lbl">Cena (Kč) *</label><input id="m-price" type="number" placeholder="380" min="0"></div>
+        <div><label class="m-lbl">Velikost</label><input id="m-size" placeholder="40 × 70 cm"></div>
+      </div>
+      <label class="m-lbl">Popis *</label><textarea id="m-desc" rows="2" placeholder="Jemné luční heřmánky..."></textarea>
+      <label class="m-lbl">Materiál</label><input id="m-mat" placeholder="100% len">
+      <label class="m-lbl">Použití</label><input id="m-uses" placeholder="Kuchyňská utěrka, dekorace...">
+      <label class="m-lbl">Vlastnosti (každá na novém řádku)</label>
+      <textarea id="m-props" rows="3" placeholder="Vysoce savá&#10;Rychle schne"></textarea>
+      <label class="m-lbl">Péče (každá na novém řádku)</label>
+      <textarea id="m-care" rows="2" placeholder="Prát na 40 °C&#10;Nebělit"></textarea>
+      <label class="m-lbl">Hlavní foto (cesta)</label><input id="m-img" placeholder="fotky/nove/hermanek_hezka.JPG">
+      <label class="m-lbl">Všechny fotky (každá na novém řádku)</label>
+      <textarea id="m-imgs" rows="3" placeholder="fotky/nove/hermanek_hezka.JPG&#10;fotky/nove/hermanek_detail.JPG"></textarea>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:7px;">
+        <input type="checkbox" id="m-vis" checked style="width:auto">
+        <label for="m-vis" style="font-size:13px;cursor:pointer">Viditelný na webu</label>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn-mc" onclick="mClose()">Zrušit</button>
+      <button class="btn-ms" onclick="mSave()">Uložit produkt</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ══ CONFIG ══
+const GH_REPO   = 'miszik/misiksvet';
+const GH_BRANCH = 'main';
+const PASS_KEY  = 'msw-pass';
+const TOKEN_KEY = 'msw-gh-token';
+const CLKEY_KEY = 'msw-cl-key';
+const DEFAULT_PASS = 'Kvetiny5824*';
+
+// ══ STATE ══
+let products = [], shipping = { costs:{}, labels:{} };
+let shas = {};           // path → sha for GitHub API
+let dirty = new Set();   // 'products' | 'shipping'
+let curEmail = 'platba', clBusy = false, clHistory = [];
+
+// ══ SHA-256 ══
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══ PASSWORD ══
+async function initPass() {
+  if (!localStorage.getItem(PASS_KEY)) {
+    localStorage.setItem(PASS_KEY, await sha256(DEFAULT_PASS));
+  }
+}
+
+async function checkPass() {
+  const val = document.getElementById('pass-input').value;
+  const hash = await sha256(val);
+  if (hash === localStorage.getItem(PASS_KEY)) {
+    document.getElementById('screen-pass').style.display = 'none';
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) { document.getElementById('screen-token').style.display = 'flex'; }
+    else { await startApp(); }
+  } else {
+    document.getElementById('pass-err').textContent = 'Nesprávné heslo';
+  }
+}
+
+async function saveToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t.startsWith('ghp_') && !t.startsWith('github_pat_')) {
+    document.getElementById('token-err').textContent = 'Token by měl začínat ghp_ nebo github_pat_'; return;
+  }
+  localStorage.setItem(TOKEN_KEY, t);
+  document.getElementById('screen-token').style.display = 'none';
+  await startApp();
+}
+
+// ══ APP START ══
+async function startApp() {
+  document.getElementById('app').classList.add('on');
+  toast('Načítám data z GitHubu…');
+  try {
+    await Promise.all([loadProducts(), loadShipping()]);
+    renderProds(); renderShipping(); eprev(); gprev();
+    toast('Načteno!', 'ok');
+  } catch(e) {
+    toast('Chyba načítání: ' + e.message, 'err');
+  }
+  const k = localStorage.getItem(CLKEY_KEY);
+  if (k) document.getElementById('cl-key').placeholder = 'Klíč uložen (zadej nový pro změnu)';
+}
+
+// ══ GITHUB API ══
+function ghHeaders(extra = {}) {
+  const t = localStorage.getItem(TOKEN_KEY);
+  return { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', ...extra };
+}
+
+async function ghRead(path) {
+  const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.message || `GitHub read error (${r.status})`);
+  shas[path] = d.sha;
+  return decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
+}
+
+async function ghWrite(path, content, msg) {
+  const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+    method: 'PUT', headers: ghHeaders(),
+    body: JSON.stringify({ message: msg, content: btoa(unescape(encodeURIComponent(content))), sha: shas[path], branch: GH_BRANCH })
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.message || `GitHub write error (${r.status})`);
+  shas[path] = d.content.sha;
+}
+
+// ══ LOAD DATA ══
+async function loadProducts() {
+  const src = await ghRead('js/products.js');
+  const m = src.match(/const PRODUCTS\s*=\s*(\[[\s\S]*\])\s*;/);
+  if (!m) throw new Error('Nelze parsovat products.js');
+  products = Function('"use strict";return ' + m[1])();
+}
+
+async function loadShipping() {
+  const src = await ghRead('js/order.js');
+  const ml = src.match(/const deliveryLabels\s*=\s*(\{[^}]*\})\s*;/);
+  const mc = src.match(/const deliveryCosts\s*=\s*(\{[^}]*\})\s*;/);
+  if (!ml || !mc) throw new Error('Nelze parsovat order.js');
+  shipping.labels = Function('"use strict";return ' + ml[1])();
+  shipping.costs  = Function('"use strict";return ' + mc[1])();
+}
+
+// ══ SAVE ══
+async function saveAll() {
+  const btn = document.getElementById('btn-save');
+  btn.textContent = 'Ukládám…'; btn.disabled = true;
+  try {
+    if (dirty.has('products')) {
+      const hdr = `// js/products.js\n// Single source of truth pro produktova data.\n// visible: false = produkt je pripraveny, ale nezobrazuje se na webu.\n\nconst PRODUCTS = `;
+      await ghWrite('js/products.js', hdr + serializeProds() + ';\n', 'Admin: aktualizace produktů');
+    }
+    if (dirty.has('shipping')) {
+      let src = await ghRead('js/order.js');
+      src = src.replace(/const deliveryLabels\s*=\s*\{[^}]*\}\s*;/, 'const deliveryLabels = ' + serObj(shipping.labels) + ';');
+      src = src.replace(/const deliveryCosts\s*=\s*\{[^}]*\}\s*;/,  'const deliveryCosts = '  + serObjNum(shipping.costs) + ';');
+      await ghWrite('js/order.js', src, 'Admin: aktualizace cen dopravy');
+    }
+    dirty.clear(); updateSaveBar();
+    toast('Uloženo na GitHub! Web se obnoví za ~1 min.', 'ok');
+  } catch(e) {
+    toast('Chyba ukládání: ' + e.message, 'err');
+  }
+  btn.textContent = 'Uložit změny'; updateSaveBar();
+}
+
+function markDirty(what) { dirty.add(what); updateSaveBar(); }
+function updateSaveBar() {
+  const el = document.getElementById('save-status'), btn = document.getElementById('btn-save');
+  if (dirty.size) { el.textContent = 'Neuložené změny'; el.style.color='#c8960a'; btn.disabled=false; }
+  else { el.textContent=''; btn.disabled=true; }
+}
+
+// ══ SERIALIZERS ══
+const esc = s => String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+function serializeProds() {
+  return '[\n' + products.map(p => {
+    const L = ['  {'];
+    L.push(`    id: '${esc(p.id)}',`);
+    L.push(`    name: '${esc(p.name)}',`);
+    L.push(`    price: ${p.price},`);
+    L.push(`    image: '${esc(p.image)}',`);
+    if (p.imagePosition) L.push(`    imagePosition: '${esc(p.imagePosition)}',`);
+    L.push(`    images: [${(p.images||[]).map(i=>`'${esc(i)}'`).join(', ')}],`);
+    L.push(`    description: '${esc(p.description)}',`);
+    L.push(`    material: '${esc(p.material)}',`);
+    L.push(`    size: ${p.size!=null?`'${esc(p.size)}'`:'null'},`);
+    if (p.properties?.length) L.push(`    properties: [${p.properties.map(x=>`'${esc(x)}'`).join(', ')}],`);
+    if (p.care?.length)       L.push(`    care: [${p.care.map(x=>`'${esc(x)}'`).join(', ')}],`);
+    if (p.uses)               L.push(`    uses: '${esc(p.uses)}',`);
+    L.push(`    type: '${p.type}'${p.visible===false?',':''}`);
+    if (p.visible===false) L.push(`    visible: false`);
+    L.push('  }');
+    return L.join('\n');
+  }).join(',\n') + '\n]';
+}
+
+const serObj    = obj => '{\n' + Object.entries(obj).map(([k,v])=>`    '${k}': '${esc(v)}'`).join(',\n') + '\n  }';
+const serObjNum = obj => '{\n' + Object.entries(obj).map(([k,v])=>`    '${k}': ${v}`).join(',\n') + '\n  }';
+
+// ══ PRODUCTS UI ══
+function renderProds() {
+  const tb = document.getElementById('prod-body');
+  if (!products.length) { tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Žádné produkty</td></tr>'; return; }
+  tb.innerHTML = products.map((p,i) => `<tr>
+    <td>${p.image?`<img class="thumb" src="../${p.image}" onerror="this.style.display='none'">`:'<div class="no-thumb">🧵</div>'}</td>
+    <td><strong>${p.name}</strong></td>
+    <td>${p.price} Kč</td>
+    <td><span class="badge ${p.type==='uterka'?'b-green':'b-grey'}">${p.type==='uterka'?'Utěrka':'Zástěra'}</span></td>
+    <td><button class="${p.visible===false?'tog-off':'tog-on'}" onclick="togVis(${i})">${p.visible===false?'Skrytý':'Viditelný'}</button></td>
+    <td style="white-space:nowrap"><button class="btn btn-e" onclick="openEdit(${i})">Upravit</button> <button class="btn btn-d" onclick="delProd(${i})">Smazat</button></td>
+  </tr>`).join('');
+}
+
+function togVis(i) { products[i].visible = products[i].visible===false ? undefined : false; markDirty('products'); renderProds(); }
+
+function delProd(i) {
+  if (!confirm(`Smazat "${products[i].name}"?`)) return;
+  products.splice(i,1); markDirty('products'); renderProds();
+}
+
+// ══ MODAL ══
+function openAdd() {
+  document.getElementById('m-title').textContent = 'Nový produkt';
+  ['m-oid','m-id','m-name','m-price','m-size','m-desc','m-mat','m-uses','m-props','m-care','m-img','m-imgs'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-typ').value='uterka';
+  document.getElementById('m-vis').checked=true;
+  document.getElementById('m-id').disabled=false;
+  document.getElementById('mbg').classList.add('on');
+}
+
+function openEdit(i) {
+  const p = products[i];
+  document.getElementById('m-title').textContent = 'Upravit produkt';
+  document.getElementById('m-oid').value  = p.id;
+  document.getElementById('m-id').value   = p.id; document.getElementById('m-id').disabled=true;
+  document.getElementById('m-typ').value  = p.type;
+  document.getElementById('m-name').value = p.name;
+  document.getElementById('m-price').value= p.price;
+  document.getElementById('m-size').value = p.size??'';
+  document.getElementById('m-desc').value = p.description;
+  document.getElementById('m-mat').value  = p.material??'';
+  document.getElementById('m-uses').value = p.uses??'';
+  document.getElementById('m-props').value= (p.properties||[]).join('\n');
+  document.getElementById('m-care').value = (p.care||[]).join('\n');
+  document.getElementById('m-img').value  = p.image??'';
+  document.getElementById('m-imgs').value = (p.images||[]).join('\n');
+  document.getElementById('m-vis').checked= p.visible!==false;
+  document.getElementById('mbg').classList.add('on');
+}
+
+function mClose() { document.getElementById('mbg').classList.remove('on'); }
+
+function mSave() {
+  const id    = document.getElementById('m-id').value.trim();
+  const name  = document.getElementById('m-name').value.trim();
+  const price = parseInt(document.getElementById('m-price').value);
+  const oid   = document.getElementById('m-oid').value;
+  if (!id||!name||isNaN(price)) { toast('Vyplň povinná pole','err'); return; }
+  if (!oid && products.find(p=>p.id===id)) { toast('ID už existuje','err'); return; }
+  const lines = id => document.getElementById(id).value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const p = { id, name, price,
+    image: document.getElementById('m-img').value.trim(),
+    images: lines('m-imgs'),
+    description: document.getElementById('m-desc').value.trim(),
+    material: document.getElementById('m-mat').value.trim(),
+    size: document.getElementById('m-size').value.trim()||null,
+    properties: lines('m-props'), care: lines('m-care'),
+    uses: document.getElementById('m-uses').value.trim(),
+    type: document.getElementById('m-typ').value
+  };
+  if (!document.getElementById('m-vis').checked) p.visible=false;
+  if (oid) { const idx=products.findIndex(x=>x.id===oid); if(idx>=0) products[idx]=p; }
+  else products.push(p);
+  markDirty('products'); renderProds(); mClose();
+  toast(oid?'Produkt upraven':'Produkt přidán','ok');
+}
+
+// ══ SHIPPING UI ══
+function renderShipping() {
+  const el = document.getElementById('sh-editor');
+  el.innerHTML = Object.keys(shipping.costs).filter(k=>k!=='osobni-odber').map(k => {
+    const base = (shipping.labels[k]||k).replace(/\s*\(\d+\s*Kč\)/,'');
+    return `<div class="sh-row"><span class="sh-name">${base}</span>
+      <input type="number" class="sh-in" value="${shipping.costs[k]}" min="0" onchange="updShip('${k}',this.value)">
+      <span class="sh-cur">Kč</span></div>`;
+  }).join('') + `<div class="sh-row"><span class="sh-name">Osobní odběr (Struhařov)</span><span style="color:var(--muted);font-size:13px">zdarma</span></div>`;
+}
+
+function updShip(k,v) {
+  const p=parseInt(v)||0; shipping.costs[k]=p;
+  if(shipping.labels[k]) shipping.labels[k]=shipping.labels[k].replace(/\d+ Kč/,p+' Kč');
+  markDirty('shipping');
+}
+
+// ══ TABS ══
+function go(name) {
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('on');
+  document.querySelector(`nav button[data-t="${name}"]`).classList.add('active');
+}
+
+// ══ EMAIL TABS ══
+function etab(type, btn) {
+  curEmail=type;
+  document.querySelectorAll('.etab').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  document.getElementById('ep-platba').style.display   = type==='platba'?'':'none';
+  document.getElementById('ep-expedice').style.display = type==='expedice'?'':'none';
+  eprev();
+}
+
+function eprev() {
+  if (curEmail==='platba') {
+    document.getElementById('fr-platba').srcdoc = ePlatba(
+      v('e1j')||'zákaznice', v('e1c')||'—', v('e1k')||'—');
+  } else {
+    document.getElementById('fr-expedice').srcdoc = eExpedice(
+      v('e2j')||'zákaznice', v('e2c')||'—', document.getElementById('e2d').value, v('e2z')||null);
+  }
+}
+function gprev() {
+  document.getElementById('fr-obecny').srcdoc = eObecny(v('gj')||'zákaznice', v('gt')||'');
+}
+const v = id => document.getElementById(id)?.value?.trim() || '';
+
+async function copyE(type) {
+  let html;
+  if (type==='platba')   html = ePlatba(v('e1j')||'zákaznice',v('e1c')||'—',v('e1k')||'—');
+  else if (type==='expedice') html = eExpedice(v('e2j')||'zákaznice',v('e2c')||'—',document.getElementById('e2d').value,v('e2z')||null);
+  else html = eObecny(v('gj')||'zákaznice',v('gt')||'');
+  try {
+    await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'})})]);
+    toast('Zkopírováno → otevři Gmail/Seznam → Nová zpráva → Ctrl+V','ok');
+  } catch { toast('Nepodařilo se automaticky. Vyber vše v náhledu ručně.','err'); }
+}
+
+// ══ EMAIL TEMPLATES ══
+const eFooter = `<tr><td style="background:#f5f0eb;padding:20px 32px;text-align:center;border-top:1px solid #e0d4c4;">
+  <p style="margin:0 0 4px;color:#8b6f47;font-size:14px;font-family:Georgia,serif;">Míša — Mišik svět</p>
+  <p style="margin:0;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">
+    <a href="mailto:ms.zikova@seznam.cz" style="color:#a09080;text-decoration:none">ms.zikova@seznam.cz</a> &nbsp;·&nbsp;
+    <a href="https://misiksvet.cz" style="color:#a09080;text-decoration:none">misiksvet.cz</a>
+  </p></td></tr>`;
+
+const eWrap = body => `<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;"><tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#fffdf9;border-radius:6px;overflow:hidden;max-width:560px;width:100%;">
+<tr><td style="background:#8b6f47;padding:28px 32px;text-align:center;">
+  <p style="margin:0;color:#fffdf9;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;">Mišik svět</p>
+  <p style="margin:6px 0 0;color:#e8d9c8;font-size:12px;letter-spacing:1px;font-family:Arial,sans-serif;">VÝŠIVKY NA PŘÍRODNÍCH TKANINÁCH</p>
+</td></tr>${body}${eFooter}</table></td></tr></table></body></html>`;
+
+function ePlatba(jmeno,cislo,castka) { return eWrap(`
+<tr><td style="padding:32px 32px 24px;">
+  <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. ${cislo}</p>
+  <p style="margin:0 0 18px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
+  <p style="margin:0 0 14px;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše platba <strong>${castka} Kč</strong> byla přijata — děkujeme!</p>
+  <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše objednávka nyní putuje do výroby. Ušijeme ji s láskou a dáme Vám vědět, jakmile bude na cestě k Vám.</p>
+</td></tr>
+<tr><td style="padding:0 32px 32px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #7a8c6e;"><tr><td>
+    <p style="margin:0 0 10px;color:#7a8c6e;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Stav objednávky</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Objednávka přijata</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Platba přijata</p>
+    <p style="margin:0 0 5px;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Ve výrobě</p>
+    <p style="margin:0;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Odesláno</p>
+  </td></tr></table>
+</td></tr>`); }
+
+function eExpedice(jmeno,cislo,doprava,zasilka) {
+  const zr = zasilka ? `<p style="margin:0;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">Číslo zásilky: <strong>${zasilka}</strong></p>` : '';
+  return eWrap(`
+<tr><td style="padding:32px 32px 24px;">
+  <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. ${cislo}</p>
+  <p style="margin:0 0 18px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
+  <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše objednávka je hotová a právě se balí! Brzy se k Vám vydá na cestu.</p>
+</td></tr>
+<tr><td style="padding:0 32px 24px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #8b6f47;"><tr><td>
+    <p style="margin:0 0 10px;color:#8b6f47;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Informace o zásilce</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">Doprava: <strong>${doprava}</strong></p>
+    ${zr}
+  </td></tr></table>
+</td></tr>
+<tr><td style="padding:0 32px 32px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #7a8c6e;"><tr><td>
+    <p style="margin:0 0 10px;color:#7a8c6e;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Stav objednávky</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Objednávka přijata</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Platba přijata</p>
+    <p style="margin:0 0 5px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Ve výrobě</p>
+    <p style="margin:0;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Odesláno</p>
+  </td></tr></table>
+</td></tr>`); }
+
+function eObecny(jmeno,text) { return eWrap(`
+<tr><td style="padding:32px 32px 32px;">
+  <p style="margin:0 0 18px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
+  <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">${text.replace(/\n/g,'<br>')||'<em style="color:#a09080">Text se zobrazí zde...</em>'}</p>
+</td></tr>`); }
+
+// ══ CLAUDE AI ══
+function clSaveKey() {
+  const k = document.getElementById('cl-key').value.trim();
+  if (!k) return;
+  localStorage.setItem(CLKEY_KEY,k);
+  document.getElementById('cl-key').value='';
+  document.getElementById('cl-key').placeholder='Klíč uložen';
+  toast('API klíč uložen','ok');
+}
+function clClearKey() { localStorage.removeItem(CLKEY_KEY); document.getElementById('cl-key').placeholder='sk-ant-api03-...'; toast('Klíč smazán','ok'); }
+function clKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();clSend();} }
+
+const CL_TOOLS = [
+  { name:'get_products', description:'Vrátí seznam všech produktů.', input_schema:{type:'object',properties:{}} },
+  { name:'add_product', description:'Přidá nový produkt.', input_schema:{type:'object',required:['id','name','price','description','material','type'],properties:{id:{type:'string'},name:{type:'string'},price:{type:'number'},description:{type:'string'},material:{type:'string'},size:{type:'string'},uses:{type:'string'},type:{type:'string',enum:['uterka','zastera']},properties:{type:'array',items:{type:'string'}},care:{type:'array',items:{type:'string'}},image:{type:'string'},images:{type:'array',items:{type:'string'}},visible:{type:'boolean'}}} },
+  { name:'edit_product', description:'Upraví pole existujícího produktu.', input_schema:{type:'object',required:['id'],properties:{id:{type:'string'},name:{type:'string'},price:{type:'number'},description:{type:'string'},visible:{type:'boolean'},material:{type:'string'},size:{type:'string'},uses:{type:'string'}}} },
+  { name:'delete_product', description:'Smaže produkt.', input_schema:{type:'object',required:['id'],properties:{id:{type:'string'}}} },
+  { name:'get_shipping', description:'Vrátí aktuální ceny dopravy.', input_schema:{type:'object',properties:{}} },
+  { name:'set_shipping_price', description:'Nastaví cenu dopravy.', input_schema:{type:'object',required:['key','price'],properties:{key:{type:'string'},price:{type:'number'}}} },
+  { name:'save_changes', description:'Uloží změny do GitHubu.', input_schema:{type:'object',properties:{}} }
+];
+
+function clExec(name, inp) {
+  switch(name) {
+    case 'get_products': return JSON.stringify(products.map(p=>({id:p.id,name:p.name,price:p.price,type:p.type,visible:p.visible!==false})));
+    case 'add_product': {
+      if(products.find(p=>p.id===inp.id)) return `Chyba: ID "${inp.id}" již existuje.`;
+      const p={...inp}; if(p.visible!==false) delete p.visible;
+      products.push(p); markDirty('products'); renderProds();
+      return `Produkt "${inp.name}" přidán.`;
+    }
+    case 'edit_product': {
+      const idx=products.findIndex(p=>p.id===inp.id);
+      if(idx<0) return `Chyba: "${inp.id}" nenalezen.`;
+      const {id,...ch}=inp; Object.assign(products[idx],ch);
+      markDirty('products'); renderProds();
+      return `Produkt "${inp.id}" upraven.`;
+    }
+    case 'delete_product': {
+      const idx=products.findIndex(p=>p.id===inp.id);
+      if(idx<0) return `Chyba: "${inp.id}" nenalezen.`;
+      const nm=products[idx].name; products.splice(idx,1);
+      markDirty('products'); renderProds();
+      return `Produkt "${nm}" smazán.`;
+    }
+    case 'get_shipping': return JSON.stringify(Object.entries(shipping.costs).map(([k,v])=>({key:k,label:shipping.labels[k]||k,price:v})));
+    case 'set_shipping_price': {
+      if(!(inp.key in shipping.costs)) return `Chyba: klíč "${inp.key}" neexistuje.`;
+      shipping.costs[inp.key]=inp.price;
+      if(shipping.labels[inp.key]) shipping.labels[inp.key]=shipping.labels[inp.key].replace(/\d+ Kč/,inp.price+' Kč');
+      markDirty('shipping'); renderShipping();
+      return `Cena "${inp.key}" → ${inp.price} Kč.`;
+    }
+    case 'save_changes': saveAll(); return 'Ukládám...';
+    default: return `Neznámý nástroj: ${name}`;
+  }
+}
+
+function clMsg(type,text) {
+  const c=document.getElementById('chat-msgs'), el=document.createElement('div');
+  el.className = type==='user'?'cm-u':type==='tool'?'cm-t':type==='err'?'cm-err':'cm-a';
+  el.textContent=text; c.appendChild(el); c.scrollTop=c.scrollHeight; return el;
+}
+
+async function clSend() {
+  if(clBusy) return;
+  const inp=document.getElementById('cl-in'), text=inp.value.trim();
+  if(!text) return;
+  const key=localStorage.getItem(CLKEY_KEY);
+  if(!key){toast('Nejdřív ulož Anthropic API klíč','err');return;}
+  clMsg('user',text); inp.value=''; clBusy=true; document.getElementById('cl-send').disabled=true;
+  clHistory.push({role:'user',content:text});
+  const typing=clMsg('ai','…');
+  try {
+    let msgs=[...clHistory], resp;
+    const sys=`Jsi asistent Míši pro správu e-shopu Mišik svět (misiksvet.cz). Vždy česky, buď stručný. Před smazáním se ujisti. Repo: ${GH_REPO}, branch: ${GH_BRANCH}.`;
+    while(true) {
+      const r=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-opus-4-7',max_tokens:2048,system:sys,tools:CL_TOOLS,messages:msgs})
+      });
+      if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${r.status}`);}
+      resp=await r.json();
+      if(resp.stop_reason==='tool_use'){
+        const results=[];
+        for(const b of resp.content){
+          if(b.type==='tool_use'){
+            const res=clExec(b.name,b.input);
+            clMsg('tool',`🔧 ${b.name} → ${res}`);
+            results.push({type:'tool_result',tool_use_id:b.id,content:res});
+          }
+        }
+        msgs=[...msgs,{role:'assistant',content:resp.content},{role:'user',content:results}];
+      } else break;
+    }
+    typing.remove();
+    const txt=resp.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+    clMsg('ai',txt); clHistory=[...msgs,{role:'assistant',content:resp.content}];
+  } catch(e) { typing.remove(); clMsg('err','Chyba: '+e.message); }
+  clBusy=false; document.getElementById('cl-send').disabled=false;
+}
+
+// ══ SETTINGS ══
+function updateToken() {
+  const t=document.getElementById('new-token').value.trim();
+  if(!t){toast('Zadej token','err');return;}
+  localStorage.setItem(TOKEN_KEY,t); document.getElementById('new-token').value='';
+  toast('Token aktualizován','ok');
+}
+
+async function changePass() {
+  const p1=document.getElementById('new-pass').value, p2=document.getElementById('new-pass2').value;
+  if(!p1){toast('Zadej nové heslo','err');return;}
+  if(p1!==p2){toast('Hesla se neshodují','err');return;}
+  localStorage.setItem(PASS_KEY,await sha256(p1));
+  document.getElementById('new-pass').value=''; document.getElementById('new-pass2').value='';
+  toast('Heslo změněno','ok');
+}
+
+function logout() { location.reload(); }
+
+// ══ TOAST ══
+let _tt;
+function toast(msg,type='') {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='on '+(type||'');
+  clearTimeout(_tt); _tt=setTimeout(()=>el.className='',3500);
+}
+
+// ══ INIT ══
+(async()=>{
+  await initPass();
+  const k=localStorage.getItem(CLKEY_KEY);
+  if(k) document.getElementById('cl-key').placeholder='Klíč uložen';
+  document.getElementById('pass-input').focus();
+  document.getElementById('mbg').addEventListener('click',e=>{if(e.target===document.getElementById('mbg'))mClose();});
+})();
+</script>
+</body>
+</html>

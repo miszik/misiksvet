@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mišik svět — Generátor emailů</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f0eb; font-family: Georgia, serif; padding: 32px 16px; }
+    .wrap { max-width: 1100px; margin: 0 auto; display: flex; gap: 32px; align-items: flex-start; }
+    .form-panel { background: #fffdf9; border-radius: 8px; width: 360px; flex-shrink: 0; padding: 32px; }
+    .preview-panel { flex: 1; min-width: 0; }
+    h1 { font-size: 18px; color: #8b6f47; letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
+    .subtitle { font-size: 11px; color: #a09080; letter-spacing: 1px; text-align: center; font-family: Arial, sans-serif; text-transform: uppercase; margin-bottom: 28px; }
+    label { display: block; font-size: 11px; color: #8b6f47; letter-spacing: 1px; text-transform: uppercase; font-family: Arial, sans-serif; margin-bottom: 5px; margin-top: 14px; }
+    input, select { width: 100%; border: 1px solid #d4c4b0; border-radius: 4px; padding: 9px 11px; font-size: 14px; font-family: Arial, sans-serif; color: #3a2e24; background: #fffdf9; outline: none; transition: border-color .2s; }
+    input:focus, select:focus { border-color: #8b6f47; }
+    .btn { display: block; width: 100%; margin-top: 24px; padding: 13px; background: #8b6f47; color: #fffdf9; border: none; border-radius: 4px; font-size: 15px; font-family: Georgia, serif; letter-spacing: 1px; cursor: pointer; transition: background .2s; }
+    .btn:hover { background: #7a6040; }
+    .btn-copy { background: #7a8c6e; margin-top: 0; font-size: 13px; padding: 11px; letter-spacing: 0.5px; }
+    .btn-copy:hover { background: #697a5e; }
+    .section { display: none; }
+    .section.active { display: block; }
+    hr { border: none; border-top: 1px solid #e0d4c4; margin: 20px 0; }
+    .hint { font-size: 11px; color: #a09080; font-family: Arial, sans-serif; margin-top: 5px; line-height: 1.5; }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .preview-label { font-size: 11px; color: #8b6f47; letter-spacing: 1px; text-transform: uppercase; font-family: Arial, sans-serif; }
+    .preview-box { background: #fffdf9; border-radius: 8px; overflow: hidden; }
+    .adresa-bar { background: #f5f0eb; border: 1px solid #d4c4b0; border-radius: 4px; padding: 10px 14px; font-size: 13px; font-family: Arial, sans-serif; color: #3a2e24; margin-bottom: 10px; }
+    .adresa-bar span { color: #a09080; }
+    .msg { margin-top: 12px; padding: 10px 14px; border-radius: 4px; font-size: 13px; font-family: Arial, sans-serif; display: none; }
+    .msg.ok { background: #e8f0e4; color: #4a6a3a; border-left: 3px solid #7a8c6e; }
+    .msg.err { background: #f5e8e8; color: #8b3a3a; border-left: 3px solid #c07070; }
+    .placeholder-info { background: #f5f0eb; border-radius: 8px; padding: 48px 32px; text-align: center; color: #a09080; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.7; }
+    .placeholder-info strong { color: #8b6f47; display: block; font-size: 16px; margin-bottom: 8px; font-family: Georgia, serif; }
+    iframe { display: block; width: 100%; border: none; border-radius: 8px; }
+    @media (max-width: 780px) {
+      .wrap { flex-direction: column; }
+      .form-panel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- FORMULÁŘ -->
+  <div class="form-panel">
+    <h1>Mišik svět</h1>
+    <p class="subtitle">Generátor stavových emailů</p>
+
+    <label for="typ">Typ emailu</label>
+    <select id="typ" onchange="prepniTyp()">
+      <option value="">— vyber —</option>
+      <option value="platba">Platba přijata</option>
+      <option value="expedice">Expedice / odesláno</option>
+    </select>
+
+    <hr>
+
+    <div id="spolecne" class="section">
+      <label for="email_zakaznika">Email zákazníka</label>
+      <input type="email" id="email_zakaznika" placeholder="zakaznik@email.cz" oninput="aktualizujPreview()">
+
+      <label for="jmeno">Jméno zákazníka</label>
+      <input type="text" id="jmeno" placeholder="Jana Nováková" oninput="aktualizujPreview()">
+
+      <label for="cislo_obj">Číslo objednávky</label>
+      <input type="text" id="cislo_obj" placeholder="MS-2025-001" oninput="aktualizujPreview()">
+    </div>
+
+    <div id="sekce-platba" class="section">
+      <label for="castka">Částka (Kč)</label>
+      <input type="text" id="castka" placeholder="750" oninput="aktualizujPreview()">
+      <p class="hint">Z notifikace Air Bank nebo z emailu objednávky.</p>
+    </div>
+
+    <div id="sekce-expedice" class="section">
+      <label for="doprava">Způsob dopravy</label>
+      <select id="doprava" onchange="aktualizujPreview()">
+        <option value="Zásilkovna">Zásilkovna</option>
+        <option value="PPL">PPL</option>
+        <option value="Česká pošta">Česká pošta</option>
+        <option value="Osobní odběr (Struhařov)">Osobní odběr (Struhařov)</option>
+      </select>
+
+      <label for="cislo_zasilky">Číslo zásilky</label>
+      <input type="text" id="cislo_zasilky" placeholder="Z1234567890" oninput="aktualizujPreview()">
+      <p class="hint">Nechej prázdné u osobního odběru.</p>
+    </div>
+
+    <div id="akce" class="section" style="margin-top:24px;">
+      <button class="btn btn-copy" onclick="kopirovatDoSchranky()">Kopírovat email do schránky</button>
+      <p class="hint" style="margin-top:8px;text-align:center;">Pak otevři Gmail nebo Seznam → Nová zpráva → Ctrl+V</p>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div id="preview-placeholder" class="placeholder-info">
+      <strong>Náhled emailu</strong>
+      Vyber typ emailu a vyplň údaje — email se vygeneruje automaticky.
+    </div>
+
+    <div id="preview-wrap" style="display:none;">
+      <div class="preview-header">
+        <span class="preview-label">Náhled</span>
+      </div>
+      <div class="adresa-bar">
+        <span>Komu: </span><strong id="adresa-komu">—</strong>
+      </div>
+      <div class="preview-box">
+        <iframe id="preview-frame" height="600" scrolling="yes"></iframe>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function prepniTyp() {
+    const typ = document.getElementById('typ').value;
+    document.getElementById('spolecne').className = typ ? 'section active' : 'section';
+    document.getElementById('sekce-platba').className = typ === 'platba' ? 'section active' : 'section';
+    document.getElementById('sekce-expedice').className = typ === 'expedice' ? 'section active' : 'section';
+    document.getElementById('akce').className = typ ? 'section active' : 'section';
+    document.getElementById('msg').style.display = 'none';
+    aktualizujPreview();
+  }
+
+  function getHtml() {
+    const typ = document.getElementById('typ').value;
+    const jmeno = document.getElementById('jmeno').value.trim() || 'zákaznice';
+    const cisloObj = document.getElementById('cislo_obj').value.trim() || '—';
+
+    if (typ === 'platba') {
+      const castka = document.getElementById('castka').value.trim() || '—';
+      return sablonaPlatba(jmeno, cisloObj, castka);
+    } else if (typ === 'expedice') {
+      const doprava = document.getElementById('doprava').value;
+      const cisloZasilky = document.getElementById('cislo_zasilky').value.trim() || '—';
+      return sablonaExpedice(jmeno, cisloObj, doprava, cisloZasilky);
+    }
+    return '';
+  }
+
+  function aktualizujPreview() {
+    const typ = document.getElementById('typ').value;
+    if (!typ) {
+      document.getElementById('preview-placeholder').style.display = '';
+      document.getElementById('preview-wrap').style.display = 'none';
+      return;
+    }
+    document.getElementById('preview-placeholder').style.display = 'none';
+    document.getElementById('preview-wrap').style.display = '';
+
+    const email = document.getElementById('email_zakaznika').value.trim();
+    document.getElementById('adresa-komu').textContent = email || '(nevyplněno)';
+
+    const html = getHtml();
+    const frame = document.getElementById('preview-frame');
+    frame.srcdoc = html;
+  }
+
+  async function kopirovatDoSchranky() {
+    const html = getHtml();
+    if (!html) return;
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }) })
+      ]);
+      zobrazMsg('Zkopírováno! Otevři Gmail nebo Seznam → Nová zpráva → Ctrl+V', 'ok');
+    } catch (e) {
+      zobrazMsg('Nepodařilo se zkopírovat automaticky. Klikni pravým tlačítkem do náhledu → Vybrat vše → Kopírovat.', 'err');
+    }
+  }
+
+  function zobrazMsg(text, typ) {
+    const el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + typ;
+    el.style.display = 'block';
+  }
+
+  /* ── ŠABLONY ── */
+
+  function sablonaPlatba(jmeno, cisloObj, castka) {
+    return `<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;">
+  <tr><td align="center">
+    <table width="560" cellpadding="0" cellspacing="0" style="background:#fffdf9;border-radius:6px;overflow:hidden;max-width:560px;width:100%;">
+      <tr><td style="background:#8b6f47;padding:28px 32px;text-align:center;">
+        <p style="margin:0;color:#fffdf9;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;">Mišik svět</p>
+        <p style="margin:6px 0 0;color:#e8d9c8;font-size:12px;letter-spacing:1px;font-family:Arial,sans-serif;">VÝŠIVKY NA PŘÍRODNÍCH TKANINÁCH</p>
+      </td></tr>
+      <tr><td style="padding:32px 32px 24px;">
+        <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. ${cisloObj}</p>
+        <p style="margin:0 0 20px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
+        <p style="margin:0 0 16px;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše platba <strong>${castka} Kč</strong> byla přijata — děkujeme!</p>
+        <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše objednávka nyní putuje do výroby. Ušijeme ji s láskou a dáme Vám vědět, jakmile bude na cestě k Vám.</p>
+      </td></tr>
+      <tr><td style="padding:0 32px 32px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #7a8c6e;">
+          <tr><td>
+            <p style="margin:0 0 12px;color:#7a8c6e;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Stav objednávky</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Objednávka přijata</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Platba přijata</p>
+            <p style="margin:0 0 6px;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Ve výrobě</p>
+            <p style="margin:0;color:#a09080;font-size:14px;font-family:Arial,sans-serif;">&#9675; Odesláno</p>
+          </td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="background:#f5f0eb;padding:20px 32px;text-align:center;border-top:1px solid #e0d4c4;">
+        <p style="margin:0 0 4px;color:#8b6f47;font-size:14px;font-family:Georgia,serif;">Míša — Mišik svět</p>
+        <p style="margin:0;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">
+          <a href="mailto:ms.zikova@seznam.cz" style="color:#a09080;text-decoration:none;">ms.zikova@seznam.cz</a>
+          &nbsp;·&nbsp;
+          <a href="https://misiksvet.cz" style="color:#a09080;text-decoration:none;">misiksvet.cz</a>
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
+  }
+
+  function sablonaExpedice(jmeno, cisloObj, doprava, cisloZasilky) {
+    const zasilkaRadek = cisloZasilky && cisloZasilky !== '—'
+      ? `<p style="margin:0;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">Číslo zásilky: <strong>${cisloZasilky}</strong></p>`
+      : '';
+    return `<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;">
+  <tr><td align="center">
+    <table width="560" cellpadding="0" cellspacing="0" style="background:#fffdf9;border-radius:6px;overflow:hidden;max-width:560px;width:100%;">
+      <tr><td style="background:#8b6f47;padding:28px 32px;text-align:center;">
+        <p style="margin:0;color:#fffdf9;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;">Mišik svět</p>
+        <p style="margin:6px 0 0;color:#e8d9c8;font-size:12px;letter-spacing:1px;font-family:Arial,sans-serif;">VÝŠIVKY NA PŘÍRODNÍCH TKANINÁCH</p>
+      </td></tr>
+      <tr><td style="padding:32px 32px 24px;">
+        <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. ${cisloObj}</p>
+        <p style="margin:0 0 20px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>${jmeno}</strong>,</p>
+        <p style="margin:0;color:#3a2e24;font-size:15px;line-height:1.7;">Vaše objednávka je hotová a právě se balí! Brzy se k Vám vydá na cestu.</p>
+      </td></tr>
+      <tr><td style="padding:0 32px 24px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #8b6f47;">
+          <tr><td>
+            <p style="margin:0 0 12px;color:#8b6f47;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Informace o zásilce</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">Doprava: <strong>${doprava}</strong></p>
+            ${zasilkaRadek}
+          </td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:0 32px 32px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #7a8c6e;">
+          <tr><td>
+            <p style="margin:0 0 12px;color:#7a8c6e;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Stav objednávky</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Objednávka přijata</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Platba přijata</p>
+            <p style="margin:0 0 6px;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Ve výrobě</p>
+            <p style="margin:0;color:#3a2e24;font-size:14px;font-family:Arial,sans-serif;">&#10003; Odesláno</p>
+          </td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="background:#f5f0eb;padding:20px 32px;text-align:center;border-top:1px solid #e0d4c4;">
+        <p style="margin:0 0 4px;color:#8b6f47;font-size:14px;font-family:Georgia,serif;">Míša — Mišik svět</p>
+        <p style="margin:0;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">
+          <a href="mailto:ms.zikova@seznam.cz" style="color:#a09080;text-decoration:none;">ms.zikova@seznam.cz</a>
+          &nbsp;·&nbsp;
+          <a href="https://misiksvet.cz" style="color:#a09080;text-decoration:none;">misiksvet.cz</a>
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
+  }
+</script>
+</body>
+</html>

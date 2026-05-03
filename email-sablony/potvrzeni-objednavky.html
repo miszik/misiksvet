@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="background:#fffdf9;border-radius:6px;overflow:hidden;max-width:560px;width:100%;">
+
+          <!-- Hlavička -->
+          <tr>
+            <td style="background:#8b6f47;padding:28px 32px;text-align:center;">
+              <p style="margin:0;color:#fffdf9;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;">Mišik svět</p>
+              <p style="margin:6px 0 0;color:#e8d9c8;font-size:12px;letter-spacing:1px;font-family:Arial,sans-serif;">VÝŠIVKY NA PŘÍRODNÍCH TKANINÁCH</p>
+            </td>
+          </tr>
+
+          <!-- Tělo -->
+          <tr>
+            <td style="padding:32px 32px 8px;">
+              <p style="margin:0 0 4px;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">Objednávka č. {{order_number}}</p>
+              <p style="margin:0 0 16px;color:#3a2e24;font-size:16px;line-height:1.6;">Dobrý den, <strong>{{full_name}}</strong>,</p>
+              <p style="margin:0 0 24px;color:#3a2e24;font-size:15px;line-height:1.7;">děkujeme za Vaši objednávku! Rádi ji pro Vás ušijeme a expedujeme do 14 dní.</p>
+            </td>
+          </tr>
+
+          <!-- Souhrn -->
+          <tr>
+            <td style="padding:0 32px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;border-radius:4px;padding:20px;border-left:3px solid #8b6f47;">
+                <tr>
+                  <td>
+                    <p style="margin:0 0 12px;color:#8b6f47;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Přehled objednávky</p>
+                    <p style="margin:0 0 8px;color:#3a2e24;font-size:14px;white-space:pre-line;">{{cart_summary}}</p>
+                    <hr style="border:none;border-top:1px solid #d4c4b0;margin:12px 0;">
+                    <p style="margin:0 0 4px;color:#3a2e24;font-size:14px;">Poštovné: {{shipping_cost}}</p>
+                    <p style="margin:0;color:#3a2e24;font-size:15px;"><strong>Celkem k úhradě: {{total}} Kč</strong></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Doručení -->
+          <tr>
+            <td style="padding:0 32px 24px;">
+              <p style="margin:0 0 8px;color:#8b6f47;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Doručení</p>
+              <p style="margin:0;color:#3a2e24;font-size:14px;line-height:1.6;">{{delivery}}<br>{{pickup_point}}{{home_address}}</p>
+            </td>
+          </tr>
+
+          <!-- QR platba -->
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#7a8c6e;border-radius:4px;padding:20px;">
+                <tr>
+                  <td align="center">
+                    <p style="margin:0 0 12px;color:#fff;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Platební instrukce</p>
+                    <p style="margin:0 0 8px;color:#e8f0e4;font-size:12px;font-family:Arial,sans-serif;">(Pokud se QR kód nezobrazuje, povolte načítání externích obrázků ve svém e-mailovém klientovi, nebo použijte číslo účtu a VS níže.)</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=3a2e24&bgcolor=f5f0eb&data=SPD*1.0*ACC:CZ8330300000003640489012*AM:{{total}}*CC:CZK*X-VS:{{variable_symbol}}*MSG:Objednavka+Misiksvet" alt="QR platba" width="180" height="180" style="display:block;margin:0 auto 16px;border-radius:4px;">
+                    <p style="margin:0 0 4px;color:#e8f0e4;font-size:13px;font-family:Arial,sans-serif;">Částka: <strong style="color:#fff;">{{total}} Kč</strong></p>
+                    <p style="margin:0 0 4px;color:#e8f0e4;font-size:13px;font-family:Arial,sans-serif;">VS: <strong style="color:#fff;">{{variable_symbol}}</strong></p>
+                    <p style="margin:12px 0 0;color:#e8f0e4;font-size:12px;font-family:Arial,sans-serif;">nebo převodem na účet<br><strong style="color:#fff;">3640489012/3030</strong></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Poznámka -->
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <p style="margin:0 0 8px;color:#8b6f47;font-size:11px;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;">Poznámka</p>
+              <p style="margin:0;color:#3a2e24;font-size:14px;line-height:1.6;">{{note}}</p>
+            </td>
+          </tr>
+
+          <!-- Patička -->
+          <tr>
+            <td style="background:#f5f0eb;padding:20px 32px;text-align:center;border-top:1px solid #e0d4c4;">
+              <p style="margin:0 0 4px;color:#8b6f47;font-size:14px;font-family:Georgia,serif;">Míša — Mišik svět</p>
+              <p style="margin:0;color:#a09080;font-size:12px;font-family:Arial,sans-serif;">
+                <a href="mailto:ms.zikova@seznam.cz" style="color:#a09080;text-decoration:none;">ms.zikova@seznam.cz</a>
+                &nbsp;·&nbsp;
+                <a href="https://misiksvet.cz" style="color:#a09080;text-decoration:none;">misiksvet.cz</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
