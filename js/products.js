@@ -136,8 +136,7 @@ const PRODUCTS = [
     properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
     care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
     uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
-    type: 'uterka',
-    visible: false
+    type: 'uterka'
   },
   {
     id: 'kakost',
@@ -157,8 +156,7 @@ const PRODUCTS = [
     properties: ['Vysoce savá', 'Rychle schne', 'Antibakteriální', 'Změkčuje se praním'],
     care: ['Prát na 40 °C', 'Nebělit', 'Nesušit v sušičce', 'Lze žehlit'],
     uses: 'Kuchyňská utěrka, dekorace, prostírka, obal na chléb.',
-    type: 'uterka',
-    visible: false
+    type: 'uterka'
   },
   {
     id: 'lichorerisnice',
