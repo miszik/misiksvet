@@ -1005,7 +1005,7 @@ footer a {
 
 .product-modal__img {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: 6px 0 0 0;
   display: block;
