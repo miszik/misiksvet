@@ -1052,8 +1052,8 @@ footer a {
 @media (max-width: 600px) {
   .product-modal__img {
     border-radius: 6px 6px 0 0;
-    max-height: 55vw;
-    aspect-ratio: auto;
+    aspect-ratio: 4 / 5;
+    max-height: none;
   }
   .product-modal__thumbs {
     border-radius: 0;
