@@ -171,6 +171,16 @@ function initNav() {
         hamburger.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Zavreni menu po kliknuti mimo nej
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('open') &&
+          !navLinks.contains(e.target) &&
+          !hamburger.contains(e.target)) {
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
 
   if (nav) {
