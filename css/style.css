@@ -992,9 +992,14 @@ footer a {
 }
 
 @media (max-width: 600px) {
+  #product-modal {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
   .product-modal__box {
     grid-template-columns: 1fr;
-    max-height: 95vh;
+    max-height: none;
   }
 }
 
