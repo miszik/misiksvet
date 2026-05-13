@@ -398,10 +398,9 @@ nav.scrolled {
   width: 160px;
   height: 160px;
   margin: 0 auto 4px;
-  background-size: 290%;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  mix-blend-mode: multiply;
 }
 
 .value-card h3 {
