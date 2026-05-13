@@ -294,10 +294,33 @@ nav.scrolled {
   transform: translateY(-3px);
 }
 
-.product-card img {
+.product-card__img-wrap {
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.product-card img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.product-card__cesky {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(255, 253, 249, 0.92);
+  color: #8b6f47;
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.5px;
+  padding: 3px 9px;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 111, 71, 0.25);
+  pointer-events: none;
 }
 
 .product-card__body {

@@ -6,14 +6,17 @@
 function productCardHTML(p) {
   return `
     <article class="product-card" data-product-id="${p.id}" role="button" tabindex="0" aria-label="Zobrazit detail: ${p.name}">
-      <img
-        src="${p.image}"
-        alt="${p.name} — ${p.material}"
-        loading="lazy"
-        width="600"
-        height="600"
-        ${p.imagePosition ? `style="object-position:${p.imagePosition}"` : ''}
-      >
+      <div class="product-card__img-wrap">
+        <img
+          src="${p.image}"
+          alt="${p.name} — ${p.material}"
+          loading="lazy"
+          width="600"
+          height="600"
+          ${p.imagePosition ? `style="object-position:${p.imagePosition}"` : ''}
+        >
+        <span class="product-card__cesky">🇨🇿 Vyrobeno v&nbsp;ČR</span>
+      </div>
       <div class="product-card__body">
         <h3 class="product-card__name">${p.name}</h3>
         <p class="product-card__desc">${p.description}</p>
