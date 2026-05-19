@@ -929,12 +929,16 @@ footer a {
 }
 
 .form-success {
-  color: #2a7a2a;
-  font-size: 0.95rem;
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  background: #f0faf0;
-  border-radius: 4px;
+  color: #1e5c1e;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.6;
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #e8f5e8;
+  border: 2px solid #4caf50;
+  border-radius: 6px;
+  text-align: center;
 }
 
 #submit-btn {

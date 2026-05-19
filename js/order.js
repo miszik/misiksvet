@@ -466,10 +466,20 @@ async function handleFormSubmit(e) {
 
   // Owner email odešel — objednávka přijata, odečti sklad, vymaž košík a zobraz úspěch
   await decrementStock(cart);
-  if (successEl) successEl.hidden = false;
-  if (submitBtn) submitBtn.textContent = 'Odesláno ✓';
   localStorage.setItem('ms_last_sent', String(Date.now()));
   clearCart();
+
+  // Reset formuláře
+  form.reset();
+  selectedBalikovna = null;
+  selectedPplPoint  = null;
+  handleDeliveryChange('');
+
+  if (successEl) {
+    successEl.hidden = false;
+    successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Odeslat objednávku'; }
 
   // Zákazníkský email — nezávislý, neblokuje úspěch objednávky
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE, params)
