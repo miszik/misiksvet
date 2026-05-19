@@ -451,13 +451,18 @@ async function handleFormSubmit(e) {
     variable_symbol: vs
   };
 
+  const sendWithTimeout = (serviceId, templateId, params, ms) => Promise.race([
+    emailjs.send(serviceId, templateId, params),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout — email se nepodařilo odeslat včas.')), ms))
+  ]);
+
   try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OWNER_TEMPLATE, params);
+    await sendWithTimeout(EMAILJS_SERVICE_ID, EMAILJS_OWNER_TEMPLATE, params, 15000);
   } catch (err) {
     console.error('EmailJS owner error:', err);
     const detail = err?.text || err?.message || JSON.stringify(err);
     if (errorEl) {
-      errorEl.textContent = 'Něco se nepovedlo: ' + detail + '. Kontaktujte nás na Instagramu.';
+      errorEl.textContent = 'Něco se nepovedlo: ' + detail + '. Zkuste to znovu nebo nás kontaktujte na Instagramu.';
       errorEl.hidden = false;
     }
     if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Odeslat objednávku'; }
@@ -470,7 +475,8 @@ async function handleFormSubmit(e) {
   clearCart();
 
   // Reset formuláře
-  form.reset();
+  const orderForm = document.getElementById('order-form');
+  if (orderForm) orderForm.reset();
   selectedBalikovna = null;
   selectedPplPoint  = null;
   handleDeliveryChange('');
